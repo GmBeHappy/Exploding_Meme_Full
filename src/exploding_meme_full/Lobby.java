@@ -54,7 +54,7 @@ public class Lobby implements MqttCallback{
         msg.put("name", this.playerName);
         msgArray.add(msg);
         sendMessage(msgArray.toJSONString());
-        startGame();
+        
         
     }
     
@@ -68,7 +68,13 @@ public class Lobby implements MqttCallback{
     
     public void startGame() throws MqttException{
         this.game = new Game(playerName, playerNames,this.gameRoom);
+        JSONObject msg = new JSONObject();
+        JSONArray msgArray = new JSONArray();
+        msg.put("isStart", "true");
+        msgArray.add(msg);
+        sendMessage(msgArray.toJSONString());
         this.client.disconnect();
+        
     }
     
     private void connectServer(String gameRoom) throws MqttException{
@@ -140,6 +146,10 @@ public class Lobby implements MqttCallback{
                                 System.out.println(playerNamesArray.toJSONString());
                                 this.sendMessage(playerNamesArray.toJSONString());
                             }
+                            
+                            if(playerInLobby==2){
+                                startGame();
+                            }
                         }
                     }
                 }
@@ -151,7 +161,9 @@ public class Lobby implements MqttCallback{
                         }
                             System.out.println(this.playerNames);    
                     }
-                    
+                    if(json.get("isStart").equals("true")){
+                        this.startGame();
+                    }
                 }
             }
              

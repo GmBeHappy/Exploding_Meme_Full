@@ -131,7 +131,7 @@ public class Game implements MqttCallback{
         String msg = new String(message.getPayload());
         try{
             JSONObject json = (JSONObject) parser.parse(msg);
-            if(Lobby.isHead){
+            if(!Lobby.isHead){
                 if(json.get("typeUpdate").equals("deckUpdate")){
                     Game.deck = new Deck(json.get("deskName").toString());
                     Object o = parser.parse(json.get("deck").toString());
