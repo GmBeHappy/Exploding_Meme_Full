@@ -345,21 +345,24 @@ public class LobbyViewManger {
     }
     
     private void updatePlayerInSeat(){
-        int myIndex=0;
         for (int i = 0; i < lobby.playerNames.size(); i++) {
-            if(lobby.playerNames.get(i).toString().equals(playerName)){
-                myIndex = i;
-            }
+            player_name[i] = lobby.playerNames.get(i);
         }
-        player_name[0]=lobby.playerNames.get(myIndex).toString();
-            if(lobby.playerNames.size()!=1){
-                for (int i = 1; i <= lobby.playerNames.size()-myIndex ; i++) {
-                player_name[0+i]=lobby.playerNames.get(myIndex+i).toString();
-            }
-            for (int i = 1; i >= myIndex ; i--) {
-                player_name[myIndex-i]=lobby.playerNames.get(myIndex-i).toString();
-            }
-        }
+//        int myIndex=0;
+//        for (int i = 0; i < lobby.playerNames.size(); i++) {
+//            if(lobby.playerNames.get(i).toString().equals(playerName)){
+//                myIndex = i;
+//            }
+//        }
+//        player_name[0]=lobby.playerNames.get(myIndex).toString();
+//            if(lobby.playerNames.size()!=1){
+//                for (int i = 1; i <= lobby.playerNames.size()-myIndex ; i++) {
+//                player_name[0+i]=lobby.playerNames.get(myIndex+i).toString();
+//            }
+//            for (int i = 1; i >= myIndex ; i--) {
+//                player_name[myIndex-i]=lobby.playerNames.get(myIndex-i).toString();
+//            }
+//        }
     }
     
     private void updatePlayerHand(){
