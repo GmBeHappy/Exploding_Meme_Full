@@ -124,7 +124,7 @@ public class Lobby implements MqttCallback {
                     JSONObject replyMsg = new JSONObject();
                     JSONArray playerNamesArray = new JSONArray();
                     replyMsg.put("typeUpdate", "hostHandCheck");
-                    if(playerArray.size()==1){
+                    if (playerArray.size() == 1) {
                         for (int i = 0; i < playerArray.size(); i++) {
                             if (playerArray.get(i).equals(this.playerName) && this.playerInLobby == 0) {
                                 this.playerInLobby += 1;
@@ -135,13 +135,11 @@ public class Lobby implements MqttCallback {
                                 this.isSuccessCreateRoom = false;
                             }
                             if (!playerArray.get(i).equals("") && !playerArray.get(i).equals(this.playerName) && this.playerInLobby > 0) {
-                                for (int k = 0; k < this.playerInLobby; k++) {
-                                    if (!playerArray.get(i).equals(this.playerNames.get(k))) {
-                                        this.playerInLobby += 1;
-                                        this.playerNames.add(playerArray.get(i).toString());
-                                        System.out.println(this.playerNames);
-                                    }
-                                }
+
+                                this.playerInLobby += 1;
+                                this.playerNames.add(playerArray.get(i).toString());
+                                System.out.println(this.playerNames);
+
                                 for (int j = 0; j < this.playerInLobby; j++) {
                                     playerNamesArray.add(this.playerNames.get(j));
                                 }
@@ -152,7 +150,7 @@ public class Lobby implements MqttCallback {
 
                         }
                     }
-                    
+
                 }
             }
             if (!isHead) {
@@ -162,16 +160,14 @@ public class Lobby implements MqttCallback {
                     JSONArray playerArray = (JSONArray) o;
                     System.out.println(playerArray);
                     this.playerNames.clear();
-                    this.playerInLobby=0;
+                    this.playerInLobby = 0;
                     for (int i = 0; i < playerArray.size(); i++) {
                         this.playerInLobby += 1;
                         this.playerNames.add(playerArray.get(i).toString());
-                        
+
                         System.out.println(this.playerNames);
                     }
-                }
-
-                else if (json.get("typeUpdate").equals("isStart")) {
+                } else if (json.get("typeUpdate").equals("isStart")) {
                     if (json.get("status").equals("true")) {
                         this.isStart = true;
                     } else {
