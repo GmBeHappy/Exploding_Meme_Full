@@ -54,7 +54,14 @@ public class Lobby implements MqttCallback{
         msg.put("name", this.playerName);
         msgArray.add(msg);
         sendMessage(msgArray.toJSONString());
-        
+        //startGame();
+//        while(!isSuccessCreateRoom){
+//            System.out.println("wait for create room");
+//        }
+//        while(playerInLobby<2){
+//            System.out.println("wait for player");
+//        }
+//        this.startGame();
         
     }
     
@@ -146,10 +153,6 @@ public class Lobby implements MqttCallback{
                                 System.out.println(playerNamesArray.toJSONString());
                                 this.sendMessage(playerNamesArray.toJSONString());
                             }
-                            
-                            if(playerInLobby==2){
-                                startGame();
-                            }
                         }
                     }
                 }
@@ -161,9 +164,7 @@ public class Lobby implements MqttCallback{
                         }
                             System.out.println(this.playerNames);    
                     }
-                    if(json.get("isStart").equals("true")){
-                        this.startGame();
-                    }
+                    
                 }
             }
              
