@@ -18,6 +18,7 @@ public class HowtoplayViewManger {
     private static final int GAME_WIDTH =  1920 ;
     private static final int GAME_HIGHT =1080;
 
+    private int ggg;
     private Stage menuStage;
 
     public HowtoplayViewManger()
