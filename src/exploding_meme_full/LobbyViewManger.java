@@ -20,6 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.SpaceRunnerButton;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class LobbyViewManger 
 {
@@ -150,6 +152,11 @@ public class LobbyViewManger
         CreateButtonSTART.setOnAction((event) -> 
         {
            gamestart = true;
+            try { 
+                this.startGame();
+            } catch (MqttException ex) {
+                Logger.getLogger(LobbyViewManger.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         
     }
@@ -160,9 +167,15 @@ public class LobbyViewManger
 
             @Override
             public void handle(long now) 
-            {    
-                number_people++;
-                checkgamestart();
+            {   
+                if(!gamestart){
+                    try {
+                        checkgamestart();
+                    } catch (MqttException ex) {
+                        Logger.getLogger(LobbyViewManger.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                number_people = getPlayerInLobby();
                 update_picture_textpeople();
                 checkmouseposition();
             }
@@ -171,20 +184,22 @@ public class LobbyViewManger
         TimerLoop.start();
     }
 
-    private void checkgamestart()
+    private void checkgamestart() throws MqttException
     {
         if(host == true)
         {
             if(gamestart == true)
             {
                 setButtonSTART(-100,-100);
+                this.startGame(); 
             } 
         }
         else 
         {
-            if(gamestart == true)
+            if(this.checkIsStart())
             {
                 setButtonWait(-100,-100);
+                lobby.startGame();
             } 
         }
     }
@@ -254,8 +269,26 @@ public class LobbyViewManger
         
     }
     
+    private void startGame() throws MqttException{
+        JSONObject msg = new JSONObject();
+        msg.put("typeUpdate", "isStart");
+        msg.put("status", "true");
+        lobby.sendMessage(msg.toJSONString());
+        System.out.println("ggggg");
+        lobby.startGame();
+    }
     
+    private boolean checkIsStart(){
+        return lobby.isIsStart();
+    }
     
+    private void stopConnection() throws MqttException{
+        lobby.disconnect();
+    }
+    
+    private int getPlayerInLobby(){
+        return lobby.getPlayerInLobby();
+    }
     
      private void checkmouseposition()
     {
@@ -266,7 +299,7 @@ public class LobbyViewManger
             "(sceneX: "  + event.getSceneX() + ", sceneY: "  + event.getSceneY()  + ") -- " +
             "(screenX: " + event.getScreenX()+ ", screenY: " + event.getScreenY() + ")";
 
-           System.out.println(msg);
+           //System.out.println(msg);
         });
     }
      
