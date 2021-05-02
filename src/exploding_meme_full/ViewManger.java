@@ -31,6 +31,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -254,7 +256,11 @@ public class ViewManger {
                 Lobby.isHead = true;
                 lobby.startGame();
                 LobbyViewManger lobbyviewManager = new LobbyViewManger();
-                lobbyviewManager.create(mainStage);
+                try {
+                    lobbyviewManager.create(mainStage,true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         return CreateButton;
@@ -282,7 +288,11 @@ public class ViewManger {
                 System.out.println(code);
                 lobby = new Lobby(name, code);
                 LobbyViewManger lobbyviewManager = new LobbyViewManger();
-                lobbyviewManager.create(mainStage);
+                try {
+                    lobbyviewManager.create(mainStage,false);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         return JoinButton;
