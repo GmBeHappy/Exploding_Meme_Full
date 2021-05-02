@@ -36,7 +36,7 @@ public class Game{
                     Game.players.get(i).getHand().addCard(newCard);
                 }
             }
-            //public mqtt
+            //public deck, Array Player
         }
         
         Game.isStart = true;
@@ -45,5 +45,16 @@ public class Game{
         Game.isAttack = false;
     }
     
-    
+    public static boolean endTurn(){
+        try {
+            String last = turnList.get(0);
+            turnList.remove(0);
+            turnList.add(last);
+            //public turnList
+        } catch (Exception e) {
+            return false;
+        } finally {
+            return true;
+        }
+    }
 }
