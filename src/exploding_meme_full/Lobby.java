@@ -57,7 +57,7 @@ public class Lobby implements MqttCallback {
         ary.add(this.playerName);
         msg.put("playerName", ary);
         sendMessage(msg.toJSONString());
-        
+
     }
 
     public Lobby(String playerName, String code) throws MqttException {
@@ -115,55 +115,66 @@ public class Lobby implements MqttCallback {
         try {
             JSONObject json = (JSONObject) parser.parse(msg);
             if (isHead) {
-                if(json.get("typeUpdate").equals("handCheck")){
+                if (json.get("typeUpdate").equals("handCheck")) {
+                    System.out.println("Reccive connection");
+                    Object o = parser.parse(json.get("playerName").toString());
+                    JSONArray playerArray = (JSONArray) o;
+                    System.out.println(playerArray);
+                    JSONObject replyMsg = new JSONObject();
+                    JSONArray playerNamesArray = new JSONArray();
+                    replyMsg.put("typeUpdate", "handCheck");
+                    if(playerArray.size()==1){
+                        for (int i = 0; i < playerArray.size(); i++) {
+                            if (playerArray.get(i).equals(this.playerName) && this.playerInLobby == 0) {
+                                this.playerInLobby += 1;
+                                this.isSuccessCreateRoom = true;
+                                this.playerNames.add(this.playerName);
+                                System.out.println("Success Create Game Room");
+                            } else {
+                                this.isSuccessCreateRoom = false;
+                            }
+                            if (!playerArray.get(i).equals("") && !playerArray.get(i).equals(this.playerName) && this.playerInLobby > 0) {
+                                for (int k = 0; k < this.playerInLobby; k++) {
+                                    if (!playerArray.get(i).equals(this.playerNames.get(k))) {
+                                        this.playerInLobby += 1;
+                                        this.playerNames.add(playerArray.get(i).toString());
+                                        System.out.println(this.playerNames);
+                                    }
+                                }
+                                for (int j = 0; j < this.playerInLobby; j++) {
+                                    playerNamesArray.add(this.playerNames.get(j));
+                                }
+                                replyMsg.put("playerName", playerNamesArray);
+                                System.out.println(replyMsg.toJSONString());
+                                this.sendMessage(replyMsg.toJSONString());
+                            }
+
+                        }
+                    }
+                    
+                }
+            }
+            if (!isHead) {
+                if (json.get("typeUpdate").equals("handCheck")) {
                     System.out.println("Reccive connection");
                     Object o = parser.parse(json.get("playerName").toString());
                     JSONArray playerArray = (JSONArray) o;
                     System.out.println(playerArray);
                     for (int i = 0; i < playerArray.size(); i++) {
-                        if (playerArray.get(i).equals(this.playerName) && this.playerInLobby == 0) {
-                            this.playerInLobby += 1;
-                            this.isSuccessCreateRoom = true;
-                            this.playerNames.add(this.playerName);
-                            System.out.println("Success Create Game Room");
-                        } 
-                        else {
-                            this.isSuccessCreateRoom = false;
-                        }
-                        if (!playerArray.get(i).equals("") && playerArray.get(i).equals(this.playerName) && this.playerInLobby > 0) {
-                            for (int k = 0; k < this.playerInLobby; k++) {
-                                if (!playerArray.get(i).equals(this.playerNames.get(k))) {
-                                    this.playerInLobby += 1;
-                                    this.playerNames.add(json.get("name").toString());
-                                    System.out.println(this.playerNames);
-                                    JSONObject replyMsg = new JSONObject();
-                                    JSONArray playerNamesArray = new JSONArray();
-                                    replyMsg.put("typeUpdate", "handCheck");
-                                    for (int j = 0; j < this.playerInLobby; j++) {
-                                        playerNamesArray.add(replyMsg);
-                                    }
-                                    replyMsg.put("name", playerNamesArray);
-                                    System.out.println(playerNamesArray.toJSONString());
-                                    this.sendMessage(playerNamesArray.toJSONString());
-                                }
+                        for (int j = 0; j < this.playerInLobby; j++) {
+                            if (!playerArray.get(i).equals("") && !playerArray.get(i).equals(this.playerName) && !playerArray.get(i).equals(this.playerNames.get(j))) {
+                                this.playerInLobby += 1;
+                                this.playerNames.add(json.get("name").toString());
                             }
+                            System.out.println(this.playerNames);
                         }
                     }
                 }
-            }
-            if (!isHead) {
-                for (int i = 0; i < this.playerInLobby; i++) {
-                    if (!json.get("name").equals("") && !json.get("name").equals(this.playerName) && !json.get("name").equals(this.playerNames.get(i))) {
-                        this.playerInLobby += 1;
-                        this.playerNames.add(json.get("name").toString());
-                    }
-                    System.out.println(this.playerNames);
-                }
-                if(json.get("updateType").equals("isStart")){
-                    if(json.get("status").equals("true")){
+
+                if (json.get("updateType").equals("isStart")) {
+                    if (json.get("status").equals("true")) {
                         this.isStart = true;
-                    }
-                    else{
+                    } else {
                         this.isStart = false;
                     }
                 }
@@ -189,9 +200,12 @@ public class Lobby implements MqttCallback {
 
     public boolean joinGame() throws MqttException {
         JSONObject msg = new JSONObject();
+        JSONArray ary = new JSONArray();
         msg.put("typeUpdate", "handCheck");
-        msg.put("playerName", this.playerName);
+        ary.add(this.playerName);
+        msg.put("playerName", ary);
         sendMessage(msg.toJSONString());
+
         return true;
     }
 
@@ -214,7 +228,5 @@ public class Lobby implements MqttCallback {
     public int getPlayerInLobby() {
         return playerInLobby;
     }
-    
-    
 
 }
