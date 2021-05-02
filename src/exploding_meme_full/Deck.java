@@ -5,7 +5,7 @@ import java.util.Collections;
 
 
 public class Deck {
-    private ArrayList<Card> cards = new ArrayList<Card>();
+    public ArrayList<Card> cards = new ArrayList<Card>();
     private String deckName;
     
     public Deck(String deckName) {
@@ -90,6 +90,9 @@ public class Deck {
     public String getDeckName() {
         return deckName;
     }
+
+  
+    
     
     public boolean checkHaveDefuse(){
         for (int i = 0; i < cards.size(); i++) {

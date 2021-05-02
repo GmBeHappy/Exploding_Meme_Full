@@ -32,21 +32,21 @@ public class Textuse extends Label
      
      public Textuse(String text)
     {
-        setPrefHeight(49);
-        setPrefWidth(380);
+        setPrefHeight(0);
+        setPrefWidth(0);
         setText(text);
         setWrapText(true);
         setLabelFont();
-        setAlignment(Pos.CENTER);
+        setAlignment(Pos.TOP_RIGHT);
     
     }
 
     private void setLabelFont()
     {
         try {
-        setFont(Font.loadFont(FONT_PATH,15) );
+        setFont(Font.loadFont(FONT_PATH,50) );
         } catch (Exception e) {
-            setFont(Font.font("Verdana",15));
+            setFont(Font.font("Verdana",50));
         }
     }
 }
