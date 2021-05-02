@@ -20,6 +20,9 @@ public class Deck {
                 }
             }
             cards.add(new Card(11));
+            for (int i = 0; i < playerValue - 1; i++) {
+                cards.add(new Card(12));
+            }
         } catch (Exception e) {
             return false;
         } finally {
@@ -87,6 +90,9 @@ public class Deck {
     public String getDeckName() {
         return deckName;
     }
+
+  
+    
     
     public boolean checkHaveDefuse(){
         for (int i = 0; i < cards.size(); i++) {
