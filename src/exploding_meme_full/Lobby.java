@@ -63,8 +63,6 @@ public class Lobby implements MqttCallback {
     public Lobby(String playerName, String code) throws MqttException {
         clientId = "EXPM" + UUID.randomUUID().toString();
         this.playerName = playerName;
-        this.playerNames.add(this.playerName);
-        this.playerInLobby = 1;
         this.gameRoom = code;
         isHead = false;
         this.connectServer(code);
@@ -125,7 +123,7 @@ public class Lobby implements MqttCallback {
                     System.out.println(playerArray);
                     JSONObject replyMsg = new JSONObject();
                     JSONArray playerNamesArray = new JSONArray();
-                    replyMsg.put("typeUpdate", "handCheck");
+                    replyMsg.put("typeUpdate", "hostHandCheck");
                     if(playerArray.size()==1){
                         for (int i = 0; i < playerArray.size(); i++) {
                             if (playerArray.get(i).equals(this.playerName) && this.playerInLobby == 0) {
@@ -158,19 +156,18 @@ public class Lobby implements MqttCallback {
                 }
             }
             if (!isHead) {
-                if (json.get("typeUpdate").equals("handCheck")) {
+                if (json.get("typeUpdate").equals("hostHandCheck")) {
                     System.out.println("Reccive connection");
                     Object o = parser.parse(json.get("playerName").toString());
                     JSONArray playerArray = (JSONArray) o;
                     System.out.println(playerArray);
+                    this.playerNames.clear();
+                    this.playerInLobby=0;
                     for (int i = 0; i < playerArray.size(); i++) {
-                        for (int j = 0; j < this.playerInLobby; j++) {
-                            if (!playerArray.get(i).equals("") && !playerArray.get(i).equals(this.playerName) && !playerArray.get(i).equals(this.playerNames.get(j))) {
-                                this.playerInLobby += 1;
-                                this.playerNames.add(playerArray.get(i).toString());
-                            }
-                            System.out.println(this.playerNames);
-                        }
+                        this.playerInLobby += 1;
+                        this.playerNames.add(playerArray.get(i).toString());
+                        
+                        System.out.println(this.playerNames);
                     }
                 }
 
