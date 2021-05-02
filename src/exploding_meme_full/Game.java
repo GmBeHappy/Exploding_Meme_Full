@@ -49,7 +49,7 @@ public class Game implements MqttCallback{
         Game.dropedDeck = new Deck("dropedDeck");
         
         if(Lobby.isHead) {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(5);
             Game.deck = new Deck("deck");
             
             Game.deck.refill(playerNames.size());
@@ -60,6 +60,10 @@ public class Game implements MqttCallback{
                     Game.players.get(i).getHand().addCard(newCard);
                 }
             }
+            for (int i = 0; i < playerNames.size() - 1; i++) {
+                Game.deck.cards.add(new Card(12));
+            }
+            Game.deck.shuffle();
             
             //public deck, Array Player
             JSONObject objUpdateDeck = new JSONObject();

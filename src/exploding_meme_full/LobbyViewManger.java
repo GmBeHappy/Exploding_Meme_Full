@@ -154,7 +154,7 @@ public class LobbyViewManger
            gamestart = true;
             try { 
                 this.startGame();
-            } catch (MqttException ex) {
+            } catch (MqttException | InterruptedException ex) {
                 Logger.getLogger(LobbyViewManger.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -171,7 +171,7 @@ public class LobbyViewManger
                 if(!gamestart){
                     try {
                         checkgamestart();
-                    } catch (MqttException ex) {
+                    } catch (MqttException | InterruptedException ex) {
                         Logger.getLogger(LobbyViewManger.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -184,7 +184,7 @@ public class LobbyViewManger
         TimerLoop.start();
     }
 
-    private void checkgamestart() throws MqttException
+    private void checkgamestart() throws MqttException, InterruptedException
     {
         if(host == true)
         {
@@ -269,7 +269,7 @@ public class LobbyViewManger
         
     }
     
-    private void startGame() throws MqttException{
+    private void startGame() throws MqttException, InterruptedException{
         JSONObject msg = new JSONObject();
         msg.put("typeUpdate", "isStart");
         msg.put("status", "true");
@@ -288,6 +288,8 @@ public class LobbyViewManger
     }
     
     private int getPlayerInLobby(){
+        System.out.println(lobby.getPlayerInLobby());
+        System.out.println(lobby.playerNames);
         return lobby.getPlayerInLobby();
     }
     

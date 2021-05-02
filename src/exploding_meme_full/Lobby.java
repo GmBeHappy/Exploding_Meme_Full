@@ -63,12 +63,15 @@ public class Lobby implements MqttCallback {
     public Lobby(String playerName, String code) throws MqttException {
         clientId = "EXPM" + UUID.randomUUID().toString();
         this.playerName = playerName;
+        this.playerNames.add(this.playerName);
+        this.playerInLobby = 1;
+        this.gameRoom = code;
         isHead = false;
         this.connectServer(code);
         this.joinGame();
     }
 
-    public void startGame() throws MqttException {
+    public void startGame() throws MqttException, InterruptedException {
         System.out.println("Game Start");
         this.game = new Game(playerName, playerNames, this.gameRoom);
         this.client.disconnect();
@@ -226,7 +229,7 @@ public class Lobby implements MqttCallback {
     }
 
     public int getPlayerInLobby() {
-        return playerInLobby;
+        return this.playerNames.size();
     }
 
 }
