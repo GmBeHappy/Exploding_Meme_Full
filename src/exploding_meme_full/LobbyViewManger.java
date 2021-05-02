@@ -33,7 +33,7 @@ public class LobbyViewManger {
     
     private ImageView[] picture_backplayer = new ImageView[6];
 
-    private int[] number_cardplayer = {0,0,0,0,0,0};
+    private int[] number_cardplayer = {1,0,0,0,0,0};
 
     private InfoLabel chooseShipLabel1;
 
@@ -123,6 +123,13 @@ public class LobbyViewManger {
         chooseShipLabel1.setLayoutX(1500);
         chooseShipLabel1.setLayoutY(25);
         gamePane.getChildren().add(chooseShipLabel1);
+        
+        for (int i = 0; i < text_numbercared.length; i++) {
+            text_numbercared[i] = new Textuse(String.valueOf(number_cardplayer[i]));
+            gamePane.getChildren().add(text_numbercared[i]);
+            text_numbercared[i].setLayoutX(-200);
+            text_numbercared[i].setLayoutY(0);
+        }
 
         createGameLoop();
         gameStage.show();
@@ -211,12 +218,11 @@ public class LobbyViewManger {
 
     private void update_picture_textpeople() {
         chooseShipLabel1.setText(String.format("%d / 6", number_people));
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < lobby.playerNames.size(); i++) {
             if (player_name[i].equals("")) {
 
             } else {
-                text_numbercared[i] = new Textuse(String.format("%d",number_cardplayer[i]));
-                gamePane.getChildren().add(text_numbercared[i]);
+                text_numbercared[i].setText(String.valueOf(number_cardplayer[i]));
                 
                 textplayer_name[i] = new InfoLabel(player_name[i]);
                 textplayer_name[i].setText(player_name[i]);
