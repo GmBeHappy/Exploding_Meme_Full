@@ -65,8 +65,6 @@ public class ViewManger {
     private AnimationTimer TimerLoop;
     private GridPane gridPane1;
     private GridPane gridPane2;
-    
-    Lobby lobby;
 
     
     public ViewManger() throws FileNotFoundException 
@@ -253,13 +251,7 @@ public class ViewManger {
             else
             {
                 System.out.println(name);
-                try {
-                    lobby = new Lobby(name);
-                } catch (MqttException ex) {
-                    Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                //lobby.startGame();
-                LobbyViewManger lobbyviewManager = new LobbyViewManger();
+                LobbyViewManger lobbyviewManager = new LobbyViewManger(name);
                 try {
                     lobbyviewManager.create(mainStage,true);
                 } catch (Exception ex) {
@@ -290,12 +282,7 @@ public class ViewManger {
             {
                 System.out.println(name);
                 System.out.println(code);
-                try {
-                    lobby = new Lobby(name, code);
-                } catch (MqttException ex) {
-                    Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                LobbyViewManger lobbyviewManager = new LobbyViewManger();
+                LobbyViewManger lobbyviewManager = new LobbyViewManger(name, code);
                 try {
                     lobbyviewManager.create(mainStage,false);
                 } catch (FileNotFoundException ex) {

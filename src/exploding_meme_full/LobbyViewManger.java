@@ -16,7 +16,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import exploding_meme_full.InfoLabel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.SpaceRunnerButton;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 public class LobbyViewManger 
 {
@@ -57,9 +60,26 @@ public class LobbyViewManger
     private GridPane gridPane;
 
     private Stage menuStage;
+    
+    Lobby lobby;
 
-    public LobbyViewManger()
+    public LobbyViewManger(String name)
     {
+        try {
+            lobby = new Lobby(name);
+        } catch (MqttException ex) {
+            Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        initializeStage();
+    }
+    
+    public LobbyViewManger(String name, String code)
+    {
+        try {
+            lobby = new Lobby(name, code);
+        } catch (MqttException ex) {
+            Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initializeStage();
 
     }
