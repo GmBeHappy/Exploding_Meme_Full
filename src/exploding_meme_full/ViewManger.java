@@ -260,7 +260,11 @@ public class ViewManger {
                 }
                 //lobby.startGame();
                 LobbyViewManger lobbyviewManager = new LobbyViewManger();
-                lobbyviewManager.create(mainStage);
+                try {
+                    lobbyviewManager.create(mainStage,true);
+                } catch (Exception ex) {
+                    Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         return CreateButton;
@@ -292,7 +296,11 @@ public class ViewManger {
                     Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 LobbyViewManger lobbyviewManager = new LobbyViewManger();
-                lobbyviewManager.create(mainStage);
+                try {
+                    lobbyviewManager.create(mainStage,false);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(ViewManger.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         return JoinButton;
