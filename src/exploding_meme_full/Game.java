@@ -3,6 +3,7 @@ package exploding_meme_full;
 import java.awt.Desktop;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.json.simple.JSONObject;
@@ -33,7 +34,8 @@ public class Game implements MqttCallback{
     private final String USERNAME = "OOP_Exploding_Meme";
     private final String PASSWORD = "ZjFjfNv.VZ-bKh2";
 
-    public Game(String playerName, ArrayList<String> playerNames,String gameRoom) throws MqttException {
+    public Game(String playerName, ArrayList<String> playerNames,String gameRoom) throws MqttException, InterruptedException {
+        System.out.println("gameeeee");
         clientId = "EXPM" + UUID.randomUUID().toString();
         this.connectServer(gameRoom);
         Game.playerName = playerName;
@@ -47,6 +49,7 @@ public class Game implements MqttCallback{
         Game.dropedDeck = new Deck("dropedDeck");
         
         if(Lobby.isHead) {
+            TimeUnit.SECONDS.sleep(2);
             Game.deck = new Deck("deck");
             
             Game.deck.refill(playerNames.size());

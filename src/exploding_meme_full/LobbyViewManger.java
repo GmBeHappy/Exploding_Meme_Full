@@ -279,6 +279,7 @@ public class LobbyViewManger
     }
     
     private boolean checkIsStart(){
+        host = lobby.isIsStart();
         return lobby.isIsStart();
     }
     

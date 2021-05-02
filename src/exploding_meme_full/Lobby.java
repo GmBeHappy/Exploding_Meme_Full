@@ -164,14 +164,14 @@ public class Lobby implements MqttCallback {
                         for (int j = 0; j < this.playerInLobby; j++) {
                             if (!playerArray.get(i).equals("") && !playerArray.get(i).equals(this.playerName) && !playerArray.get(i).equals(this.playerNames.get(j))) {
                                 this.playerInLobby += 1;
-                                this.playerNames.add(json.get("name").toString());
+                                this.playerNames.add(playerArray.get(i).toString());
                             }
                             System.out.println(this.playerNames);
                         }
                     }
                 }
 
-                if (json.get("updateType").equals("isStart")) {
+                else if (json.get("typeUpdate").equals("isStart")) {
                     if (json.get("status").equals("true")) {
                         this.isStart = true;
                     } else {
