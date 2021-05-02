@@ -3,8 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/OOP/Game/Exploding_Meme_Full/src/exploding_meme_full/useCard.java</file>
+            <file>file:/E:/OOP/Game/Exploding_Meme_Full/src/exploding_meme_full/Lobby.java</file>
+            <file>file:/E:/OOP/Game/Exploding_Meme_Full/src/exploding_meme_full/InfoLabel.java</file>
             <file>file:/E:/OOP/Game/Exploding_Meme_Full/src/exploding_meme_full/Game.java</file>
+            <file>file:/E:/OOP/Game/Exploding_Meme_Full/src/exploding_meme_full/GameSubScene.java</file>
+            <file>file:/E:/OOP/Game/Exploding_Meme_Full/src/exploding_meme_full/Card.java</file>
+            <file>file:/E:/OOP/Game/Exploding_Meme_Full/src/exploding_meme_full/Exploding_Meme_Full.java</file>
+            <file>file:/E:/OOP/Game/Exploding_Meme_Full/src/exploding_meme_full/ViewManger.java</file>
         </group>
     </open-files>
 </project-private>
