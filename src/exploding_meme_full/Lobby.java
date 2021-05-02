@@ -54,7 +54,7 @@ public class Lobby implements MqttCallback{
         msg.put("name", this.playerName);
         msgArray.add(msg);
         sendMessage(msgArray.toJSONString());
-        
+        startGame();
         
     }
     
@@ -66,8 +66,9 @@ public class Lobby implements MqttCallback{
         this.joinGame();
     }
     
-    public void startGame(){
-        //this.game = new Game(playerName, playerNames);
+    public void startGame() throws MqttException{
+        this.game = new Game(playerName, playerNames,this.gameRoom);
+        this.client.disconnect();
     }
     
     private void connectServer(String gameRoom) throws MqttException{
