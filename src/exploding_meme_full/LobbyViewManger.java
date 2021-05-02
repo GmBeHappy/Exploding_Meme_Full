@@ -288,8 +288,6 @@ public class LobbyViewManger
     }
     
     private int getPlayerInLobby(){
-        System.out.println(lobby.getPlayerInLobby());
-        System.out.println(lobby.playerNames);
         return lobby.getPlayerInLobby();
     }
     
