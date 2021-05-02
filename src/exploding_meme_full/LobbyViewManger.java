@@ -26,15 +26,12 @@ public class LobbyViewManger
     private Boolean host;
 
     private ImageView[] picture_player = new ImageView[6];
-  
-  
         
     private InfoLabel chooseShipLabel1;
     
-    
     private InfoLabel[] textplayer_name = new InfoLabel[6];
     
-    private String[] player_name ={"1","2","3","4","5","6"} ;
+    private String[] player_name ={"","","","","",""} ;
     
     
     
@@ -115,39 +112,6 @@ public class LobbyViewManger
         chooseShipLabel1.setLayoutY(25);
         gamePane.getChildren().add(chooseShipLabel1);
 
-        for(int i =0;i<6;i++)
-        {
-            textplayer_name[i] = new InfoLabel(player_name[i]);
-            gamePane.getChildren().add(textplayer_name[i]);
-            
-            picture_player[i] = new ImageView("exploding_meme_full/resource/playe.png");
-            gamePane.getChildren().add(picture_player[i]);
-        }
-      
-        textplayer_name[0].setLayoutX(350);
-        textplayer_name[0].setLayoutY(246);
-        
-        textplayer_name[1].setLayoutX(750);
-        textplayer_name[1].setLayoutY(180);
-        
-        textplayer_name[2].setLayoutX(1150);
-        textplayer_name[2].setLayoutY(246);
-        
-        textplayer_name[3].setLayoutX(1150);
-        textplayer_name[3].setLayoutY(600);
-        
-        textplayer_name[4].setLayoutX(750);
-        textplayer_name[4].setLayoutY(693);
-        
-        textplayer_name[5].setLayoutX(400);
-        textplayer_name[5].setLayoutY(600);
-        
-        picture_player[0].setLayoutX(384);
-        picture_player[0].setLayoutY(109);
-
-        
-
-
         createGameLoop();
         gameStage.show();
     }
@@ -199,7 +163,7 @@ public class LobbyViewManger
             {    
                 number_people++;
                 checkgamestart();
-                textpeople();
+                update_picture_textpeople();
                 checkmouseposition();
             }
             
@@ -226,12 +190,66 @@ public class LobbyViewManger
     }
 
 
-    private void textpeople()
+    private void update_picture_textpeople()
     {
         chooseShipLabel1.setText(String.format("%d / 6",number_people));
         for(int i =0;i<6;i++)
         {
-            textplayer_name[i].setText(player_name[i]);
+            if(player_name[i].equals(""))
+            {
+
+            }
+            else
+            {
+                textplayer_name[i] = new InfoLabel(player_name[i]);
+                textplayer_name[i].setText(player_name[i]);
+                gamePane.getChildren().add(textplayer_name[i]);
+
+
+                picture_player[i] = new ImageView("exploding_meme_full/resource/player.png");
+                gamePane.getChildren().add(picture_player[i]);
+                switch(i) 
+                {
+                    case 0:
+                        picture_player[0].setLayoutX(384);
+                        picture_player[0].setLayoutY(109);
+                        textplayer_name[0].setLayoutX(350);
+                        textplayer_name[0].setLayoutY(246);
+                        break;
+                    case 1:
+                      picture_player[1].setLayoutX(905);
+                      picture_player[1].setLayoutY(38);
+                      textplayer_name[1].setLayoutX(750);
+                      textplayer_name[1].setLayoutY(180);
+                      break;
+                    case 2:
+                      picture_player[2].setLayoutX(1420);
+                      picture_player[2].setLayoutY(120);
+                      textplayer_name[2].setLayoutX(1150);
+                      textplayer_name[2].setLayoutY(246);
+                      break;
+                    case 3:
+                      picture_player[3].setLayoutX(1495);
+                      picture_player[3].setLayoutY(683);
+                      textplayer_name[3].setLayoutX(1150);
+                      textplayer_name[3].setLayoutY(600);
+                      break;
+                    case 4:
+                      picture_player[4].setLayoutX(905);
+                      picture_player[4].setLayoutY(760);
+                      textplayer_name[4].setLayoutX(750);
+                      textplayer_name[4].setLayoutY(693);
+                      break;
+                    case 5:
+                      picture_player[5].setLayoutX(335);
+                      picture_player[5].setLayoutY(691);
+                      textplayer_name[5].setLayoutX(400);
+                      textplayer_name[5].setLayoutY(600);
+                      break;
+                    default:
+                      break;
+                  }
+            }
         }
         
     }
