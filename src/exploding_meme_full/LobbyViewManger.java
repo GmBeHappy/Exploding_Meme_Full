@@ -200,6 +200,7 @@ public class LobbyViewManger {
                 checkmouseposition();
                 updatePlayerInSeat();
                 if (Game.isStart) {
+                    updateIsmyTurn();
                     Deckgamestart();
                     CreateimageCard(deck_player);
                     updatePlayerHand();
@@ -361,21 +362,12 @@ public class LobbyViewManger {
         for (int i = 0; i < lobby.playerNames.size(); i++) {
             player_name[i] = lobby.playerNames.get(i);
         }
-//        int myIndex=0;
-//        for (int i = 0; i < lobby.playerNames.size(); i++) {
-//            if(lobby.playerNames.get(i).toString().equals(playerName)){
-//                myIndex = i;
-//            }
-//        }
-//        player_name[0]=lobby.playerNames.get(myIndex).toString();
-//            if(lobby.playerNames.size()!=1){
-//                for (int i = 1; i <= lobby.playerNames.size()-myIndex ; i++) {
-//                player_name[0+i]=lobby.playerNames.get(myIndex+i).toString();
-//            }
-//            for (int i = 1; i >= myIndex ; i--) {
-//                player_name[myIndex-i]=lobby.playerNames.get(myIndex-i).toString();
-//            }
-//        }
+    }
+    
+    private void updateIsmyTurn() {
+        if (Game.turnList.get(0).equals(Game.playerName)){
+            
+        }
     }
 
     private void updatePlayerHand() {
@@ -464,6 +456,5 @@ public class LobbyViewManger {
         gamePane.getChildren().add(Card_3);
         gamePane.getChildren().add(Card_2);
         gamePane.getChildren().add(Card_1);
-
     }
 }
