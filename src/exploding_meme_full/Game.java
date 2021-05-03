@@ -191,8 +191,10 @@ public class Game implements MqttCallback {
         for (int i = 0; i < players.size(); i++) {
             if(players.get(i).getPlayerName().equals(this.playerName)){
                 if(Game.players.get(i).hand.checkHaveExplo()){
-                    if (Game.players.get(i).hand.checkHaveDefuse()) 
+                    if (Game.players.get(i).hand.checkHaveDefuse()){
                         Game.players.get(i).hand.removeDefuse();
+                        System.out.println(players.get(i).getPlayerName() + " removed defuse! ");
+                    }
                     else
                         turnList.remove(0);
                 }

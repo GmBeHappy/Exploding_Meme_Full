@@ -33,7 +33,7 @@ public class LobbyViewManger {
 
     private ImageView[] picture_backplayer = new ImageView[6];
 
-    private int[] number_cardplayer = {1, 0, 0, 0, 0, 0};
+    private int[] number_cardplayer = {0, 0, 0, 0, 0, 0};
 
     private InfoLabel chooseShipLabel1;
 
