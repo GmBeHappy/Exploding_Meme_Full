@@ -217,7 +217,7 @@ public class LobbyViewManger {
 
     private void checkgamestart() throws MqttException, InterruptedException {
         if (host == true) {
-            if (this.checkIsStart()) {
+            if (gamestart == true) {
                 setButtonSTART(-100, -100);
                 this.startGame();
             }
