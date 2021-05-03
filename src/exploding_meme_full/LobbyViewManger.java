@@ -36,6 +36,8 @@ public class LobbyViewManger {
     private int[] number_cardplayer = {1,0,0,0,0,0};
 
     private InfoLabel chooseShipLabel1;
+    
+    private InfoLabel gameRoomLabel;
 
     private Textuse[] text_numbercared = new Textuse[6];
 
@@ -72,6 +74,7 @@ public class LobbyViewManger {
 
     private Stage menuStage;
     private String playerName;
+    private String gameRoom;
 
     Lobby lobby;
 
@@ -107,6 +110,7 @@ public class LobbyViewManger {
         this.host = host;
         this.menuStage = menuStage;
         this.menuStage.hide();
+        this.gameRoom = lobby.gameRoom;
         createBackground();
 
         if (host == true) {
@@ -118,7 +122,12 @@ public class LobbyViewManger {
             gamePane.getChildren().add(CreateButtonWait);
             gamestartnow();
         }
-
+        
+        gameRoomLabel = new InfoLabel(String.format("Room : %s", gameRoom),36);
+        gameRoomLabel.setLayoutX(40);
+        gameRoomLabel.setLayoutY(25);
+        gamePane.getChildren().add(gameRoomLabel);
+        
         chooseShipLabel1 = new InfoLabel(String.format("%d / 6", number_people));
         chooseShipLabel1.setLayoutX(1500);
         chooseShipLabel1.setLayoutY(25);
@@ -416,7 +425,7 @@ public class LobbyViewManger {
     private void createButton()
     {
         Card_1 = new SpaceRunnerButton("1 CARD",49,190);
-        Card_2 = new SpaceRunnerButton("2 CARD2",49,190);
+        Card_2 = new SpaceRunnerButton("2 CARD",49,190);
         Card_3 = new SpaceRunnerButton("3 CARD",49,190);
         Card_5 = new SpaceRunnerButton("5 CARD",49,190);
         draw_end = new SpaceRunnerButton("DRAW AND END",49,250);

@@ -33,6 +33,16 @@ public class InfoLabel extends Label
         setBackground(new Background(backgroundImage));
     
     }
+    
+    public InfoLabel(String text,int fontSize){
+        setText(text);
+        setWrapText(true);
+        setLavelFontSize(fontSize);
+        setAlignment(Pos.CENTER);
+
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(BACKGROUND_IMAGE,380,49, false, true),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,null);
+        setBackground(new Background(backgroundImage));
+    }
 
     private void setLabelFont()
     {
@@ -42,7 +52,14 @@ public class InfoLabel extends Label
             setFont(Font.font("Verdana",15));
         }
     }
-
+    
+    private void setLavelFontSize(int fontSize){
+        try {
+        setFont(Font.loadFont(FONT_PATH,fontSize) );
+        } catch (Exception e) {
+            setFont(Font.font("Verdana",fontSize));
+        }
+    }
 
 
 

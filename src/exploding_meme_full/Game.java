@@ -44,9 +44,7 @@ public class Game implements MqttCallback {
             Game.players.add(new Player(playerNames.get(i)));
             Game.turnList.add(playerNames.get(i));
         }
-        for (int i = 0; i < playerNames.size(); i++) {
-            Game.players.get(i).getHand().addCard(new Card(11));
-        }
+          
         Game.dropedDeck = new Deck("dropedDeck");
 
         if (Lobby.isHead) {
@@ -60,12 +58,13 @@ public class Game implements MqttCallback {
                     Card newCard = Game.deck.drawCard();
                     Game.players.get(i).getHand().addCard(newCard);
                 }
+                Game.players.get(i).getHand().addCard(new Card(11));
             }
             for (int i = 0; i < playerNames.size() - 1; i++) {
                 Game.deck.cards.add(new Card(12));
             }
             Game.deck.shuffle();
-
+            
             //public deck, Array Player
             this.updateDeck();
             //public player 

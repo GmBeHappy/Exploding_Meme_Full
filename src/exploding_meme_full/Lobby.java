@@ -33,7 +33,7 @@ public class Lobby implements MqttCallback {
     public static boolean isInGame;
 
     private String topic;
-    private String gameRoom;
+    String gameRoom;
     private MqttClient client;
     private final int qos = 2;
     private final String broker = "tcp://mqtt.gmtech.co.th:1883";
