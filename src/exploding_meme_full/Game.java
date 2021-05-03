@@ -194,9 +194,11 @@ public class Game implements MqttCallback {
                     if (Game.players.get(i).hand.checkHaveDefuse()){
                         Game.players.get(i).hand.removeDefuse();
                         System.out.println(players.get(i).getPlayerName() + " removed defuse! ");
+                        this.updatePlayerHand();
                     }
                     else
                         turnList.remove(0);
+                        
                 }
                 else {
                     this.endTurn();
@@ -205,7 +207,7 @@ public class Game implements MqttCallback {
             }
         }
         this.updateTurnList();
-        this.updatePlayerHand();
+        
     }
 
     public void messageArrived(String topic, MqttMessage message) throws MqttException {
