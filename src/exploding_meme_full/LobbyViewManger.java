@@ -467,6 +467,7 @@ public class LobbyViewManger {
                 -> {
             try {
                 lobby.game.drawCard();
+                lobby.game.turnHaveEnd();
             } catch (MqttException ex) {
                 Logger.getLogger(LobbyViewManger.class.getName()).log(Level.SEVERE, null, ex);
             }

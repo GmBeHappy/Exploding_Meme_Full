@@ -94,7 +94,25 @@ public class Deck {
     public boolean checkHaveDefuse(){
         for (int i = 0; i < cards.size(); i++) {
             if (cards.get(i).getCardId() == 11) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean removeDefuse(){
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i).getCardId() == 11) {
                 cards.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean checkHaveExplo(){
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i).getCardId() == 12) {
                 return true;
             }
         }

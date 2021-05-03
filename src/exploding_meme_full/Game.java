@@ -184,9 +184,26 @@ public class Game implements MqttCallback {
             }
         }
         this.updatePlayerHand();
-        this.endTurn();
-        this.updateTurnList();
         this.updateDeck();
+    }
+    
+    public void turnHaveEnd() throws MqttException{
+        for (int i = 0; i < players.size(); i++) {
+            if(players.get(i).getPlayerName().equals(this.playerName)){
+                if(Game.players.get(i).hand.checkHaveExplo()){
+                    if (Game.players.get(i).hand.checkHaveDefuse()) 
+                        Game.players.get(i).hand.removeDefuse();
+                    else
+                        turnList.remove(0);
+                }
+                else {
+                    this.endTurn();
+                }
+                System.out.println(players.get(i).getPlayerName() + " end turn! ");
+            }
+        }
+        this.updateTurnList();
+        this.updatePlayerHand();
     }
 
     public void messageArrived(String topic, MqttMessage message) throws MqttException {
