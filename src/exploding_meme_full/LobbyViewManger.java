@@ -24,6 +24,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import exploding_meme_full.Textuse;
+import java.util.concurrent.TimeUnit;
+import javafx.event.ActionEvent;
 
 public class LobbyViewManger {
 
@@ -463,12 +465,13 @@ public class LobbyViewManger {
 
         draw_end.setLayoutX(0);
         draw_end.setLayoutY(-200);
-        draw_end.setOnAction((event)
+        draw_end.setOnAction((ActionEvent event)
                 -> {
             try {
                 lobby.game.drawCard();
+                TimeUnit.SECONDS.sleep(1);
                 lobby.game.turnHaveEnd();
-            } catch (MqttException ex) {
+            } catch (MqttException | InterruptedException ex) {
                 Logger.getLogger(LobbyViewManger.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
