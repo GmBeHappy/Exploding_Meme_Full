@@ -184,6 +184,7 @@ public class Game implements MqttCallback {
             }
         }
         this.updatePlayerHand();
+        this.endTurn();
         this.updateTurnList();
         this.updateDeck();
     }

@@ -366,7 +366,28 @@ public class LobbyViewManger {
     
     private void updateIsmyTurn() {
         if (Game.turnList.get(0).equals(Game.playerName)){
-            
+            Card_1.setLayoutX(1100);
+            Card_1.setLayoutY(900);
+            Card_2.setLayoutX(1300);
+            Card_2.setLayoutY(900);
+            Card_3.setLayoutX(1500);
+            Card_3.setLayoutY(900);
+            Card_5.setLayoutX(1100);
+            Card_5.setLayoutY(950);
+            draw_end.setLayoutX(1300);
+            draw_end.setLayoutY(950);
+        }
+        else {
+            Card_1.setLayoutX(0);
+            Card_1.setLayoutY(-200);
+            Card_2.setLayoutX(0);
+            Card_2.setLayoutY(-200);
+            Card_3.setLayoutX(0);
+            Card_3.setLayoutY(-200);
+            Card_5.setLayoutX(0);
+            Card_5.setLayoutY(-200);
+            draw_end.setLayoutX(0);
+            draw_end.setLayoutY(-200);
         }
     }
 
@@ -412,36 +433,36 @@ public class LobbyViewManger {
         Card_5 = new SpaceRunnerButton("5 CARD", 49, 190);
         draw_end = new SpaceRunnerButton("DRAW AND END", 49, 250);
 
-        Card_1.setLayoutX(1100);
-        Card_1.setLayoutY(900);
+        Card_1.setLayoutX(0);
+        Card_1.setLayoutY(-200);
         Card_1.setOnAction((event)
                 -> {
 
         });
 
-        Card_2.setLayoutX(1300);
-        Card_2.setLayoutY(900);
+        Card_2.setLayoutX(0);
+        Card_2.setLayoutY(-200);
         Card_2.setOnAction((event)
                 -> {
 
         });
 
-        Card_3.setLayoutX(1500);
-        Card_3.setLayoutY(900);
+        Card_3.setLayoutX(0);
+        Card_3.setLayoutY(-200);
         Card_3.setOnAction((event)
                 -> {
 
         });
 
-        Card_5.setLayoutX(1100);
-        Card_5.setLayoutY(950);
+        Card_5.setLayoutX(0);
+        Card_5.setLayoutY(-200);
         Card_5.setOnAction((event)
                 -> {
 
         });
 
-        draw_end.setLayoutX(1300);
-        draw_end.setLayoutY(950);
+        draw_end.setLayoutX(0);
+        draw_end.setLayoutY(-200);
         draw_end.setOnAction((event)
                 -> {
             try {
