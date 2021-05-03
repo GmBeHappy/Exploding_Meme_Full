@@ -44,7 +44,7 @@ public class Game implements MqttCallback {
             Game.players.add(new Player(playerNames.get(i)));
             Game.turnList.add(playerNames.get(i));
         }
-          
+
         Game.dropedDeck = new Deck("dropedDeck");
 
         if (Lobby.isHead) {
@@ -64,11 +64,13 @@ public class Game implements MqttCallback {
                 Game.deck.cards.add(new Card(12));
             }
             Game.deck.shuffle();
-            
+
             //public deck, Array Player
             this.updateDeck();
             //public player 
-            this.updatePlayerHand(playerNames);
+            this.updatePlayerHand();
+            //public turn list
+            this.updateTurnList();
         }
 
         Game.isStart = true;
@@ -123,11 +125,11 @@ public class Game implements MqttCallback {
     public void deliveryComplete(IMqttDeliveryToken token) {
     }
 
-    public void updatePlayerHand(ArrayList<String> playerNames) throws MqttException {
+    public void updatePlayerHand() throws MqttException {
         JSONObject objUpdatePlayersHand = new JSONObject();
         objUpdatePlayersHand.put("typeUpdate", "playerHandUpdate");
         JSONArray playerHandArray = new JSONArray();
-        for (int i = 0; i < playerNames.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
             JSONObject objPlayerHand = new JSONObject();
             objPlayerHand.put("playerName", Game.players.get(i).getPlayerName());
             JSONArray handCardIdArray = new JSONArray();
@@ -142,6 +144,19 @@ public class Game implements MqttCallback {
         System.out.println(objUpdatePlayersHand);
         this.sendMessage(objUpdatePlayersHand.toJSONString());
     }
+    
+    public void updateTurnList() throws MqttException{
+        JSONObject objUpdateTurnList = new JSONObject();
+        objUpdateTurnList.put("typeUpdate", "turnListUpdate");
+        JSONArray turnListArray = new JSONArray();
+        for (int i = 0; i < turnList.size(); i++) {
+            
+            turnListArray.add(turnList.get(i));
+        }
+        objUpdateTurnList.put("turnList", turnListArray);
+        System.out.println(objUpdateTurnList);
+        this.sendMessage(objUpdateTurnList.toJSONString());
+    }
 
     public void updateDeck() throws MqttException {
         JSONObject objUpdateDeck = new JSONObject();
@@ -155,6 +170,18 @@ public class Game implements MqttCallback {
         objUpdateDeck.put("deck", cardIdArray);
         System.out.println(objUpdateDeck);
         this.sendMessage(objUpdateDeck.toJSONString());
+    }
+
+    public void drawCard() throws MqttException {
+        for (int i = 0; i < players.size(); i++) {
+            if(players.get(i).getPlayerName().equals(this.playerName)){
+                Card newCard = Game.deck.drawCard();
+                Game.players.get(i).hand.addCard(newCard);
+                System.out.println(players.get(i).getPlayerName() + "draw" + newCard);
+            }
+        }
+        this.updatePlayerHand();
+        this.updateTurnList();
     }
 
     public void messageArrived(String topic, MqttMessage message) throws MqttException {
@@ -182,9 +209,9 @@ public class Game implements MqttCallback {
                 JSONArray playersHandArray = (JSONArray) o;
                 //System.out.println(playersHandArray);
                 for (int i = 0; i < playersHandArray.size(); i++) {
-                    JSONObject data = (JSONObject)parser.parse(playersHandArray.get(i).toString());
+                    JSONObject data = (JSONObject) parser.parse(playersHandArray.get(i).toString());
                     for (int j = 0; j < this.players.size(); j++) {
-                        if(data.get("playerName").equals(this.players.get(j).getPlayerName())){
+                        if (data.get("playerName").equals(this.players.get(j).getPlayerName())) {
                             System.out.println("Updating " + this.players.get(j).getPlayerName());
                             Object oo = parser.parse(data.get("cardsID").toString());
                             JSONArray cardsId = (JSONArray) oo;
@@ -192,12 +219,24 @@ public class Game implements MqttCallback {
                             for (int k = 0; k < cardsId.size(); k++) {
                                 this.players.get(i).hand.addCard(new Card(Integer.parseInt(cardsId.get(k).toString())));
                             }
-                            System.out.println(this.players.get(j).getPlayerName()+"'s hand updated");
+                            System.out.println(this.players.get(j).getPlayerName() + "'s hand updated");
                         }
                     }
                     System.out.println(this.players.get(i).hand.cards);
                 }
                 System.out.println("Hands Updated");
+            }
+            if (json.get("typeUpdate").equals("turnListUpdate")) {
+                System.out.println("Updating Turn list...");
+                Object o = parser.parse(json.get("turnList").toString());
+                JSONArray turnListArray = (JSONArray) o;
+                //System.out.println(playersHandArray);
+                turnList.clear();
+                for (int i = 0; i < turnListArray.size(); i++) {
+                    turnList.add(turnListArray.get(i).toString());
+                }
+                System.out.println(turnList);
+                System.out.println("Turn list Updated");
             }
         } catch (ParseException pe) {
             System.out.println("position: " + pe.getPosition());

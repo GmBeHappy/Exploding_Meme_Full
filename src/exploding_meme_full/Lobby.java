@@ -224,5 +224,8 @@ public class Lobby implements MqttCallback {
     public int getPlayerInLobby() {
         return this.playerNames.size();
     }
-
+    
+    public void drawCard() throws MqttException{
+        this.game.drawCard();
+    } 
 }

@@ -30,34 +30,34 @@ public class LobbyViewManger {
     private Boolean host;
 
     private ImageView[] picture_player = new ImageView[6];
-    
+
     private ImageView[] picture_backplayer = new ImageView[6];
 
-    private int[] number_cardplayer = {1,0,0,0,0,0};
+    private int[] number_cardplayer = {1, 0, 0, 0, 0, 0};
 
     private InfoLabel chooseShipLabel1;
-    
+
     private InfoLabel gameRoomLabel;
 
     private Textuse[] text_numbercared = new Textuse[6];
 
     private InfoLabel[] textplayer_name = new InfoLabel[6];
 
-    private String[] player_name = {"","","","","",""} ;
+    private String[] player_name = {"", "", "", "", "", ""};
 
     private Deck deck_player;
 
     private int number_people = 0;
 
-     private SpaceRunnerButton CreateButtonWait = new SpaceRunnerButton("WAIT",49,190);
-    private SpaceRunnerButton CreateButtonSTART = new SpaceRunnerButton("START",49,190);
+    private SpaceRunnerButton CreateButtonWait = new SpaceRunnerButton("WAIT", 49, 190);
+    private SpaceRunnerButton CreateButtonSTART = new SpaceRunnerButton("START", 49, 190);
 
     private SpaceRunnerButton Card_1;
     private SpaceRunnerButton Card_2;
     private SpaceRunnerButton Card_3;
     private SpaceRunnerButton Card_5;
     private SpaceRunnerButton draw_end;
-    
+
     private Boolean gamestart = false;
 
     private AnchorPane gamePane;
@@ -79,7 +79,7 @@ public class LobbyViewManger {
     Lobby lobby;
 
     public LobbyViewManger(String name) {
-        this.playerName=name;
+        this.playerName = name;
         try {
             lobby = new Lobby(name);
         } catch (MqttException ex) {
@@ -89,7 +89,7 @@ public class LobbyViewManger {
     }
 
     public LobbyViewManger(String name, String code) {
-        this.playerName=name;
+        this.playerName = name;
         try {
             lobby = new Lobby(name, code);
         } catch (MqttException ex) {
@@ -122,17 +122,17 @@ public class LobbyViewManger {
             gamePane.getChildren().add(CreateButtonWait);
             gamestartnow();
         }
-        
-        gameRoomLabel = new InfoLabel(String.format("Room : %s", gameRoom),36);
+
+        gameRoomLabel = new InfoLabel(String.format("Room : %s", gameRoom), 36);
         gameRoomLabel.setLayoutX(40);
         gameRoomLabel.setLayoutY(25);
         gamePane.getChildren().add(gameRoomLabel);
-        
+
         chooseShipLabel1 = new InfoLabel(String.format("%d / 6", number_people));
         chooseShipLabel1.setLayoutX(1500);
         chooseShipLabel1.setLayoutY(25);
         gamePane.getChildren().add(chooseShipLabel1);
-        
+
         for (int i = 0; i < text_numbercared.length; i++) {
             text_numbercared[i] = new Textuse(String.valueOf(number_cardplayer[i]));
             gamePane.getChildren().add(text_numbercared[i]);
@@ -199,8 +199,7 @@ public class LobbyViewManger {
                 update_picture_textpeople();
                 checkmouseposition();
                 updatePlayerInSeat();
-                if(Game.isStart)
-                {
+                if (Game.isStart) {
                     Deckgamestart();
                     CreateimageCard(deck_player);
                     updatePlayerHand();
@@ -232,18 +231,18 @@ public class LobbyViewManger {
 
             } else {
                 text_numbercared[i].setText(String.valueOf(number_cardplayer[i]));
-                
+
                 textplayer_name[i] = new InfoLabel(player_name[i]);
                 textplayer_name[i].setText(player_name[i]);
                 gamePane.getChildren().add(textplayer_name[i]);
 
                 picture_player[i] = new ImageView("exploding_meme_full/resource/player.png");
                 gamePane.getChildren().add(picture_player[i]);
-                
-                Image image = new Image("exploding_meme_full/resource/Back.png",100,100, true, true);
+
+                Image image = new Image("exploding_meme_full/resource/Back.png", 100, 100, true, true);
                 picture_backplayer[i] = new ImageView(image);
                 gamePane.getChildren().add(picture_backplayer[i]);
-                
+
                 switch (i) {
                     case 0:
                         picture_player[0].setLayoutX(905);
@@ -251,7 +250,7 @@ public class LobbyViewManger {
                         textplayer_name[0].setLayoutX(750);
                         textplayer_name[0].setLayoutY(693);
                         picture_backplayer[0].setLayoutX(877);
-                        picture_backplayer[0].setLayoutY(916); 
+                        picture_backplayer[0].setLayoutY(916);
 
                         text_numbercared[0].setLayoutX(960);
                         text_numbercared[0].setLayoutY(956);
@@ -263,7 +262,7 @@ public class LobbyViewManger {
                         textplayer_name[1].setLayoutX(400);
                         textplayer_name[1].setLayoutY(600);
                         picture_backplayer[1].setLayoutX(257);
-                        picture_backplayer[1].setLayoutY(883); 
+                        picture_backplayer[1].setLayoutY(883);
 
                         text_numbercared[1].setLayoutX(342);
                         text_numbercared[1].setLayoutY(916);
@@ -275,7 +274,7 @@ public class LobbyViewManger {
                         textplayer_name[2].setLayoutX(350);
                         textplayer_name[2].setLayoutY(246);
                         picture_backplayer[2].setLayoutX(552);
-                        picture_backplayer[2].setLayoutY(45); 
+                        picture_backplayer[2].setLayoutY(45);
 
                         text_numbercared[2].setLayoutX(645);
                         text_numbercared[2].setLayoutY(70);
@@ -287,7 +286,7 @@ public class LobbyViewManger {
                         textplayer_name[3].setLayoutX(750);
                         textplayer_name[3].setLayoutY(180);
                         picture_backplayer[3].setLayoutX(1100);
-                        picture_backplayer[3].setLayoutY(45); 
+                        picture_backplayer[3].setLayoutY(45);
 
                         text_numbercared[3].setLayoutX(1180);
                         text_numbercared[3].setLayoutY(70);
@@ -299,7 +298,7 @@ public class LobbyViewManger {
                         textplayer_name[4].setLayoutX(1150);
                         textplayer_name[4].setLayoutY(246);
                         picture_backplayer[4].setLayoutX(1618);
-                        picture_backplayer[4].setLayoutY(132); 
+                        picture_backplayer[4].setLayoutY(132);
 
                         text_numbercared[4].setLayoutX(1695);
                         text_numbercared[4].setLayoutY(166);
@@ -311,7 +310,7 @@ public class LobbyViewManger {
                         textplayer_name[5].setLayoutX(1150);
                         textplayer_name[5].setLayoutY(600);
                         picture_backplayer[5].setLayoutX(1686);
-                        picture_backplayer[5].setLayoutY(724); 
+                        picture_backplayer[5].setLayoutY(724);
 
                         text_numbercared[5].setLayoutX(1767);
                         text_numbercared[5].setLayoutY(763);
@@ -357,8 +356,8 @@ public class LobbyViewManger {
             //System.out.println(msg);
         });
     }
-    
-    private void updatePlayerInSeat(){
+
+    private void updatePlayerInSeat() {
         for (int i = 0; i < lobby.playerNames.size(); i++) {
             player_name[i] = lobby.playerNames.get(i);
         }
@@ -378,103 +377,93 @@ public class LobbyViewManger {
 //            }
 //        }
     }
-    
-    private void updatePlayerHand(){
+
+    private void updatePlayerHand() {
         for (int i = 0; i < Game.players.size(); i++) {
             number_cardplayer[i] = Game.players.get(i).getHand().cards.size();
         }
     }
-    
-    private void Deckgamestart()
-     {
+
+    private void Deckgamestart() {
         for (int i = 0; i < Game.players.size(); i++) {
-            if (Game.playerName.equals(Game.players.get(i).getPlayerName())){
+            if (Game.playerName.equals(Game.players.get(i).getPlayerName())) {
                 deck_player = Game.players.get(i).getHand();
             }
         }
-     }
+    }
 
-    private void CreateimageCard(Deck deck)
-    { 
-        int j =0;
-        for(int i = 0;i < deck.cards.size();i++)
-        {
-              ImageView picture_card = new ImageView(deck.cards.get(i).getImage());
-              picture_card.setLayoutX(450+i*150);
+    private void CreateimageCard(Deck deck) {
+        int j = 0;
+        for (int i = 0; i < deck.cards.size(); i++) {
+            ImageView picture_card = new ImageView(deck.cards.get(i).getImage());
+            picture_card.setLayoutX(450 + i * 150);
 
-              if(i>=7)
-              {
-                picture_card.setLayoutY(300+150);
-                picture_card.setLayoutX(450+j*150);
+            if (i >= 7) {
+                picture_card.setLayoutY(300 + 150);
+                picture_card.setLayoutX(450 + j * 150);
                 j++;
-              }
-              else
-              {
+            } else {
                 picture_card.setLayoutY(300);
-              }
-              gamePane.getChildren().add(picture_card);
+            }
+            gamePane.getChildren().add(picture_card);
         }
     }
 
-    private void gamestartnow()
-    {
+    private void gamestartnow() {
         createButton();
     }
 
-
-    private void createButton()
-    {
-        Card_1 = new SpaceRunnerButton("1 CARD",49,190);
-        Card_2 = new SpaceRunnerButton("2 CARD",49,190);
-        Card_3 = new SpaceRunnerButton("3 CARD",49,190);
-        Card_5 = new SpaceRunnerButton("5 CARD",49,190);
-        draw_end = new SpaceRunnerButton("DRAW AND END",49,250);
-
-
+    private void createButton() {
+        Card_1 = new SpaceRunnerButton("1 CARD", 49, 190);
+        Card_2 = new SpaceRunnerButton("2 CARD", 49, 190);
+        Card_3 = new SpaceRunnerButton("3 CARD", 49, 190);
+        Card_5 = new SpaceRunnerButton("5 CARD", 49, 190);
+        draw_end = new SpaceRunnerButton("DRAW AND END", 49, 250);
 
         Card_1.setLayoutX(1100);
         Card_1.setLayoutY(900);
-        Card_1.setOnAction((event) -> 
-        {
+        Card_1.setOnAction((event)
+                -> {
 
         });
 
-
         Card_2.setLayoutX(1300);
         Card_2.setLayoutY(900);
-         Card_2.setOnAction((event) -> 
-        {
+        Card_2.setOnAction((event)
+                -> {
 
         });
 
         Card_3.setLayoutX(1500);
         Card_3.setLayoutY(900);
-         Card_3.setOnAction((event) -> 
-        {
+        Card_3.setOnAction((event)
+                -> {
 
         });
 
         Card_5.setLayoutX(1100);
         Card_5.setLayoutY(950);
-         Card_5.setOnAction((event) -> 
-        {
+        Card_5.setOnAction((event)
+                -> {
 
         });
 
         draw_end.setLayoutX(1300);
         draw_end.setLayoutY(950);
-        draw_end.setOnAction((event) -> 
-        { 
-
+        draw_end.setOnAction((event)
+                -> {
+            try {
+                lobby.game.drawCard();
+            } catch (MqttException ex) {
+                Logger.getLogger(LobbyViewManger.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
-          gamePane.getChildren().add(draw_end);
+        gamePane.getChildren().add(draw_end);
         gamePane.getChildren().add(Card_5);
-           gamePane.getChildren().add(Card_3);
-          gamePane.getChildren().add(Card_2);
-         gamePane.getChildren().add(Card_1);
-
-
+        gamePane.getChildren().add(Card_3);
+        gamePane.getChildren().add(Card_2);
+        gamePane.getChildren().add(Card_1);
 
     }
 }
