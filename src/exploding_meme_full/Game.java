@@ -183,7 +183,7 @@ public class Game implements MqttCallback {
                 System.out.println(players.get(i).getPlayerName() + " draw " + newCard);
             }
         }
-        this.updatePlayerHand();
+        //this.updatePlayerHand();
         this.updateDeck();
     }
     
@@ -194,7 +194,7 @@ public class Game implements MqttCallback {
                     if (Game.players.get(i).hand.checkHaveDefuse()){
                         Game.players.get(i).hand.removeDefuse();
                         System.out.println(players.get(i).getPlayerName() + " removed defuse! ");
-                        this.updatePlayerHand();
+                        
                     }
                     else
                         turnList.remove(0);
@@ -206,6 +206,7 @@ public class Game implements MqttCallback {
                 System.out.println(players.get(i).getPlayerName() + " end turn! ");
             }
         }
+        this.updatePlayerHand();
         this.updateTurnList();
         
     }

@@ -77,6 +77,8 @@ public class LobbyViewManger {
     private Stage menuStage;
     private String playerName;
     private String gameRoom;
+    
+    private ImageView[] picture_card = new ImageView[20];
 
     Lobby lobby;
 
@@ -215,7 +217,7 @@ public class LobbyViewManger {
 
     private void checkgamestart() throws MqttException, InterruptedException {
         if (host == true) {
-            if (gamestart == true) {
+            if (this.checkIsStart()) {
                 setButtonSTART(-100, -100);
                 this.startGame();
             }
@@ -234,14 +236,17 @@ public class LobbyViewManger {
 
             } else {
                 text_numbercared[i].setText(String.valueOf(number_cardplayer[i]));
-
+                
+                gamePane.getChildren().remove(textplayer_name[i]);
                 textplayer_name[i] = new InfoLabel(player_name[i]);
                 textplayer_name[i].setText(player_name[i]);
                 gamePane.getChildren().add(textplayer_name[i]);
 
+                gamePane.getChildren().remove(textplayer_name[i]);
                 picture_player[i] = new ImageView("exploding_meme_full/resource/player.png");
                 gamePane.getChildren().add(picture_player[i]);
-
+                
+                gamePane.getChildren().remove(picture_backplayer[i]);
                 Image image = new Image("exploding_meme_full/resource/Back.png", 100, 100, true, true);
                 picture_backplayer[i] = new ImageView(image);
                 gamePane.getChildren().add(picture_backplayer[i]);
@@ -410,17 +415,18 @@ public class LobbyViewManger {
     private void CreateimageCard(Deck deck) {
         int j = 0;
         for (int i = 0; i < deck.cards.size(); i++) {
-            ImageView picture_card = new ImageView(deck.cards.get(i).getImage());
-            picture_card.setLayoutX(450 + i * 150);
+            gamePane.getChildren().remove(picture_card[i]);
+            picture_card[i] = new ImageView(deck.cards.get(i).getImage());
+            picture_card[i].setLayoutX(450 + i * 150);
 
             if (i >= 7) {
-                picture_card.setLayoutY(300 + 150);
-                picture_card.setLayoutX(450 + j * 150);
+                picture_card[i].setLayoutY(300 + 150);
+                picture_card[i].setLayoutX(450 + j * 150);
                 j++;
             } else {
-                picture_card.setLayoutY(300);
+                picture_card[i].setLayoutY(300);
             }
-            gamePane.getChildren().add(picture_card);
+            gamePane.getChildren().add(picture_card[i]);
         }
     }
 
