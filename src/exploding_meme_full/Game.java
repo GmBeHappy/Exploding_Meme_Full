@@ -133,7 +133,7 @@ public class Game implements MqttCallback {
             objPlayerHand.put("playerName", Game.players.get(i).getPlayerName());
             JSONArray handCardIdArray = new JSONArray();
             for (int j = 0; j < Game.players.get(i).hand.cards.size(); j++) {
-                handCardIdArray.add(deck.cards.get(j).getCardId());
+                handCardIdArray.add(Game.players.get(i).hand.cards.get(j).getCardId());
             }
             objPlayerHand.put("cardsID", handCardIdArray);
             playerHandArray.add(objPlayerHand);
