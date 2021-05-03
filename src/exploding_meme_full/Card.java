@@ -66,6 +66,10 @@ public class Card extends Parent{
         return image;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     private void setCardId(String cardName) {
         for (int i = 0; i < this.cardSet.length; i++) {
             if ((this.cardSet[i]).equals(cardName)) {
@@ -76,7 +80,8 @@ public class Card extends Parent{
     }
     
     private Image randomImage(String cardName) {
-        String output = cardName + String.valueOf(1 + (int)(Math.random() * 4));
+        this.index = 1 + (int)(Math.random() * 4);
+        String output = cardName + String.valueOf(this.index);
         return new Image("file:src/exploding_meme_full/resource/".concat(output.toLowerCase()).concat(".png"),100, 140, true, true);
     }
     
