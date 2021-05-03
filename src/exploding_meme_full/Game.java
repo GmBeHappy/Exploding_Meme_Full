@@ -134,9 +134,12 @@ public class Game implements MqttCallback {
             objPlayerHand.put("playerName", Game.players.get(i).getPlayerName());
             JSONArray handCardIdArray = new JSONArray();
             for (int j = 0; j < Game.players.get(i).hand.cards.size(); j++) {
-                handCardIdArray.add(Game.players.get(i).hand.cards.get(j).getCardId());
+                JSONObject objCard = new JSONObject();
+                objCard.put("cardID",Game.players.get(i).hand.cards.get(j).getCardId());
+                objCard.put("cardIndex",Game.players.get(i).hand.cards.get(j).getIndex());
+                handCardIdArray.add(objCard);
             }
-            objPlayerHand.put("cardsID", handCardIdArray);
+            objPlayerHand.put("cards", handCardIdArray);
             playerHandArray.add(objPlayerHand);
             System.out.println(handCardIdArray);
         }
@@ -177,7 +180,7 @@ public class Game implements MqttCallback {
             if(players.get(i).getPlayerName().equals(this.playerName)){
                 Card newCard = Game.deck.drawCard();
                 Game.players.get(i).hand.addCard(newCard);
-                System.out.println(players.get(i).getPlayerName() + "draw" + newCard);
+                System.out.println(players.get(i).getPlayerName() + " draw " + newCard);
             }
         }
         this.updatePlayerHand();
@@ -213,11 +216,12 @@ public class Game implements MqttCallback {
                     for (int j = 0; j < this.players.size(); j++) {
                         if (data.get("playerName").equals(this.players.get(j).getPlayerName())) {
                             System.out.println("Updating " + this.players.get(j).getPlayerName());
-                            Object oo = parser.parse(data.get("cardsID").toString());
-                            JSONArray cardsId = (JSONArray) oo;
+                            Object oo = parser.parse(data.get("cards").toString());
+                            JSONArray cards = (JSONArray) oo;
                             this.players.get(i).hand.cards.clear();
-                            for (int k = 0; k < cardsId.size(); k++) {
-                                this.players.get(i).hand.addCard(new Card(Integer.parseInt(cardsId.get(k).toString())));
+                            for (int k = 0; k < cards.size(); k++) {
+                                JSONObject card = (JSONObject) parser.parse(cards.get(k).toString());
+                                this.players.get(i).hand.addCard(new Card(Integer.parseInt(card.get("cardID").toString()), Integer.parseInt(card.get("cardIndex").toString())));
                             }
                             System.out.println(this.players.get(j).getPlayerName() + "'s hand updated");
                         }
