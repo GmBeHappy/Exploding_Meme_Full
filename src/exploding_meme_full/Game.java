@@ -185,6 +185,7 @@ public class Game implements MqttCallback {
         }
         this.updatePlayerHand();
         this.updateTurnList();
+        this.updateDeck();
     }
 
     public void messageArrived(String topic, MqttMessage message) throws MqttException {
