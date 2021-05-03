@@ -321,7 +321,6 @@ public class LobbyViewManger {
         msg.put("typeUpdate", "isStart");
         msg.put("status", "true");
         lobby.sendMessage(msg.toJSONString());
-        System.out.println("ggggg");
         lobby.startGame();
     }
 
@@ -407,7 +406,6 @@ public class LobbyViewManger {
               gamePane.getChildren().add(picture_card);
         }
     }
-
 
     private void gamestartnow()
     {

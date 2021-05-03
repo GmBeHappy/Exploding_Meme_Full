@@ -11,30 +11,31 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
-public class Game implements MqttCallback{
+public class Game implements MqttCallback {
+
     public static boolean isStart;
     public static boolean isEndGame;
     public static boolean isMyTurn;
     public static boolean isAttack;
-    
+
     public static Deck deck;
     public static Deck dropedDeck;
-    
+
     public static ArrayList<Player> players = new ArrayList<Player>();
     public static ArrayList<String> turnList = new ArrayList<String>();
-    
+
     public static String playerName;
-    
+
     private String topic;
     private String gameRoom;
     private MqttClient client;
     private final int qos = 2;
     private final String broker = "tcp://mqtt.gmtech.co.th:1883";
-    private String clientId ;
+    private String clientId;
     private final String USERNAME = "OOP_Exploding_Meme";
     private final String PASSWORD = "ZjFjfNv.VZ-bKh2";
 
-    public Game(String playerName, ArrayList<String> playerNames,String gameRoom) throws MqttException, InterruptedException {
+    public Game(String playerName, ArrayList<String> playerNames, String gameRoom) throws MqttException, InterruptedException {
         System.out.println("gameeeee");
         clientId = "EXPM" + UUID.randomUUID().toString();
         this.connectServer(gameRoom);
@@ -47,11 +48,11 @@ public class Game implements MqttCallback{
             Game.players.get(i).getHand().addCard(new Card(11));
         }
         Game.dropedDeck = new Deck("dropedDeck");
-        
-        if(Lobby.isHead) {
-            TimeUnit.SECONDS.sleep(5);
+
+        if (Lobby.isHead) {
+            //TimeUnit.SECONDS.sleep(5);
             Game.deck = new Deck("deck");
-            
+
             Game.deck.refill(playerNames.size());
             Game.deck.shuffle();
             for (int i = 0; i < playerNames.size(); i++) {
@@ -64,30 +65,20 @@ public class Game implements MqttCallback{
                 Game.deck.cards.add(new Card(12));
             }
             Game.deck.shuffle();
-            
+
             //public deck, Array Player
-            JSONObject objUpdateDeck = new JSONObject();
-            String typeUpdate = "deckUpdate";
-            String deskName = deck.getDeckName();
-            JSONArray cardIdArray = new JSONArray();
-            for (int i = 0; i < deck.cards.size(); i++) {
-                cardIdArray.add(deck.cards.get(i).getCardId());
-            }
-            System.out.println(cardIdArray);
-            objUpdateDeck.put("typeUpdate", typeUpdate);
-            objUpdateDeck.put("deskName", deck.getDeckName());
-            objUpdateDeck.put("deck", cardIdArray);
-            System.out.println(objUpdateDeck);
-            this.sendMessage(objUpdateDeck.toJSONString());
+            this.updateDeck();
+            //public player 
+            this.updatePlayerHand(playerNames);
         }
-        
+
         Game.isStart = true;
         Game.isEndGame = false;
         Game.isMyTurn = false;
         Game.isAttack = false;
     }
-    
-    public static boolean endTurn(){
+
+    public static boolean endTurn() {
         try {
             String last = turnList.get(0);
             turnList.remove(0);
@@ -99,8 +90,8 @@ public class Game implements MqttCallback{
             return true;
         }
     }
-    
-    private void connectServer(String gameRoom) throws MqttException{
+
+    private void connectServer(String gameRoom) throws MqttException {
         MqttConnectOptions conOpt = setUpConnectionOptions(USERNAME, PASSWORD);
         this.topic = "EXPM/" + gameRoom + "/update";
         this.client = new MqttClient(broker, clientId, new MemoryPersistence());
@@ -108,52 +99,108 @@ public class Game implements MqttCallback{
         this.client.connect(conOpt);
 
         this.client.subscribe(this.topic, qos);
-        
+
     }
-    
+
     private static MqttConnectOptions setUpConnectionOptions(String username, String password) {
-       MqttConnectOptions connOpts = new MqttConnectOptions();
-       connOpts.setCleanSession(true);
-       connOpts.setUserName(username);
-       connOpts.setPassword(password.toCharArray());
-       return connOpts;
-    } 
-    
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(true);
+        connOpts.setUserName(username);
+        connOpts.setPassword(password.toCharArray());
+        return connOpts;
+    }
+
     public void sendMessage(String payload) throws MqttException {
         MqttMessage message = new MqttMessage(payload.getBytes());
         message.setQos(qos);
         this.client.publish(this.topic, message); // Blocking publish
     }
+
     public void connectionLost(Throwable cause) {
         System.out.println("Connection lost because: " + cause);
         System.exit(1);
     }
-    
+
     public void deliveryComplete(IMqttDeliveryToken token) {
     }
-    
+
+    public void updatePlayerHand(ArrayList<String> playerNames) throws MqttException {
+        JSONObject objUpdatePlayersHand = new JSONObject();
+        objUpdatePlayersHand.put("typeUpdate", "playerHandUpdate");
+        JSONArray playerHandArray = new JSONArray();
+        for (int i = 0; i < playerNames.size(); i++) {
+            JSONObject objPlayerHand = new JSONObject();
+            objPlayerHand.put("playerName", Game.players.get(i).getPlayerName());
+            JSONArray handCardIdArray = new JSONArray();
+            for (int j = 0; j < Game.players.get(i).hand.cards.size(); j++) {
+                handCardIdArray.add(deck.cards.get(j).getCardId());
+            }
+            objPlayerHand.put("cardsID", handCardIdArray);
+            playerHandArray.add(objPlayerHand);
+            System.out.println(handCardIdArray);
+        }
+        objUpdatePlayersHand.put("data", playerHandArray);
+        System.out.println(objUpdatePlayersHand);
+        this.sendMessage(objUpdatePlayersHand.toJSONString());
+    }
+
+    public void updateDeck() throws MqttException {
+        JSONObject objUpdateDeck = new JSONObject();
+        JSONArray cardIdArray = new JSONArray();
+        for (int i = 0; i < deck.cards.size(); i++) {
+            cardIdArray.add(deck.cards.get(i).getCardId());
+        }
+        System.out.println(cardIdArray);
+        objUpdateDeck.put("typeUpdate", "deckUpdate");
+        objUpdateDeck.put("deckName", deck.getDeckName());
+        objUpdateDeck.put("deck", cardIdArray);
+        System.out.println(objUpdateDeck);
+        this.sendMessage(objUpdateDeck.toJSONString());
+    }
+
     public void messageArrived(String topic, MqttMessage message) throws MqttException {
         System.out.println(String.format("[%s] %s", topic, new String(message.getPayload())));
         JSONParser parser = new JSONParser();
         String msg = new String(message.getPayload());
-        try{
+        try {
             JSONObject json = (JSONObject) parser.parse(msg);
-            if(!Lobby.isHead){
-                if(json.get("typeUpdate").equals("deckUpdate")){
-                    Game.deck = new Deck(json.get("deskName").toString());
+            if (!Lobby.isHead) {
+                if (json.get("typeUpdate").equals("deckUpdate")) {
+                    System.out.println("Updating Deck...");
+                    Game.deck = new Deck(json.get("deckName").toString());
                     Object o = parser.parse(json.get("deck").toString());
                     JSONArray cardArray = (JSONArray) o;
                     System.out.println(cardArray);
                     for (int i = 0; i < cardArray.size(); i++) {
-                        Game.deck.addCard(new Card(cardArray.get(i).toString()));
+                        Game.deck.addCard(new Card(Integer.parseInt(cardArray.get(i).toString())));
                     }
+                    System.out.println("Updated");
                 }
             }
-            else{
-                
+            if (json.get("typeUpdate").equals("playerHandUpdate")) {
+                System.out.println("Updating Hand...");
+                Object o = parser.parse(json.get("data").toString());
+                JSONArray playersHandArray = (JSONArray) o;
+                //System.out.println(playersHandArray);
+                for (int i = 0; i < playersHandArray.size(); i++) {
+                    JSONObject data = (JSONObject)parser.parse(playersHandArray.get(i).toString());
+                    for (int j = 0; j < this.players.size(); j++) {
+                        if(data.get("playerName").equals(this.players.get(j).getPlayerName())){
+                            System.out.println("Updating " + this.players.get(j).getPlayerName());
+                            Object oo = parser.parse(data.get("cardsID").toString());
+                            JSONArray cardsId = (JSONArray) oo;
+                            this.players.get(i).hand.cards.clear();
+                            for (int k = 0; k < cardsId.size(); k++) {
+                                this.players.get(i).hand.addCard(new Card(Integer.parseInt(cardsId.get(k).toString())));
+                            }
+                            System.out.println(this.players.get(j).getPlayerName()+"'s hand updated");
+                        }
+                    }
+                    System.out.println(this.players.get(i).hand.cards);
+                }
+                System.out.println("Hands Updated");
             }
-        }
-        catch(ParseException pe){	
+        } catch (ParseException pe) {
             System.out.println("position: " + pe.getPosition());
             System.out.println(pe);
         }

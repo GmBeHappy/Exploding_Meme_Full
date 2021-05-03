@@ -2,7 +2,7 @@ package exploding_meme_full;
 
 public class Player {
     private String playerName;
-    private Deck hand;
+    public Deck hand;
     private boolean isAlive;
 
     public Player(String playerName) {
