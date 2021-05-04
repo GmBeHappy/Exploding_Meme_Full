@@ -100,14 +100,26 @@ public class Deck {
         return false;
     }
     
-    public boolean removeDefuse(){
+    public int removeDefuse(){
         for (int i = 0; i < cards.size(); i++) {
             if (cards.get(i).getCardId() == 11) {
+                int index = cards.get(i).getIndex();
                 cards.remove(i);
-                return true;
+                return index;
             }
         }
-        return false;
+        return 0;
+    }
+    
+    public int removeExploding(){
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i).getCardId() == 12) {
+                int index = cards.get(i).getIndex();
+                cards.remove(i);
+                return index;
+            }
+        }
+        return 0;
     }
     
     public boolean checkHaveExplo(){

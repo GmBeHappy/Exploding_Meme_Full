@@ -167,14 +167,35 @@ public class Game implements MqttCallback {
         for (int i = 0; i < deck.cards.size(); i++) {
             cardIdArray.add(deck.cards.get(i).getCardId());
         }
-        System.out.println(cardIdArray);
+        //System.out.println(cardIdArray);
         objUpdateDeck.put("typeUpdate", "deckUpdate");
         objUpdateDeck.put("deckName", deck.getDeckName());
         objUpdateDeck.put("deck", cardIdArray);
+        System.out.println("Sending Update deck");
         System.out.println(objUpdateDeck);
         this.sendMessage(objUpdateDeck.toJSONString());
+        System.out.println("sent");
     }
-
+    
+    public void updateDropedDeck() throws MqttException {
+        JSONObject objUpdateDropedDeck = new JSONObject();
+        JSONArray cardIdArray = new JSONArray();
+        for (int i = 0; i < dropedDeck.cards.size(); i++) {
+            JSONObject card = new JSONObject();
+            card.put("cardID", dropedDeck.cards.get(i).getCardId());
+            card.put("cardIndex", dropedDeck.cards.get(i).getIndex());
+            cardIdArray.add(card);
+        }
+        //System.out.println(cardIdArray);
+        objUpdateDropedDeck.put("typeUpdate", "dropDeckUpdate");
+        objUpdateDropedDeck.put("deckName", dropedDeck.getDeckName());
+        objUpdateDropedDeck.put("cards", cardIdArray);
+        System.out.println("Sending Update dropdeck");
+        System.out.println(objUpdateDropedDeck);
+        this.sendMessage(objUpdateDropedDeck.toJSONString());
+        System.out.println("sent");
+    }
+    
     public void drawCard() throws MqttException {
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getPlayerName().equals(this.playerName)) {
@@ -193,8 +214,18 @@ public class Game implements MqttCallback {
                 if (Game.players.get(i).hand.checkHaveExplo()) {
                     System.out.println("Got exploding");
                     if (Game.players.get(i).hand.checkHaveDefuse()) {
-                        Game.players.get(i).hand.removeDefuse();
+                        int defuseIndex = Game.players.get(i).hand.removeDefuse();
+                        Game.dropedDeck.addCard(new Card(11, defuseIndex));
+                        System.out.println("defuse dropped");
                         System.out.println(players.get(i).getPlayerName() + " removed defuse! ");
+                        System.out.println("removing exploding from " + players.get(i).getPlayerName() + "hand");
+                        int exploIndex = Game.players.get(i).hand.removeExploding();
+                        System.out.println("removed exploding from " + players.get(i).getPlayerName() + "hand");
+                        Game.deck.addCard(new Card(12,exploIndex));
+                        System.out.println("return exploding to deck");
+                        Game.deck.shuffle();
+                        System.out.println("deck suffle");
+                        
                         this.endTurn();
                     } else {
                         System.out.println("Lost");
@@ -209,6 +240,7 @@ public class Game implements MqttCallback {
                 System.out.println(players.get(i).getPlayerName() + " end turn! ");
             }
         }
+        this.updateDropedDeck();
         this.updatePlayerHand();
         this.updateTurnList();
 
@@ -257,6 +289,7 @@ public class Game implements MqttCallback {
                 }
                 System.out.println("Hands Updated");
             }
+            
             if (json.get("typeUpdate").equals("turnListUpdate")) {
                 System.out.println("Updating Turn list...");
                 Object o = parser.parse(json.get("turnList").toString());
@@ -268,6 +301,20 @@ public class Game implements MqttCallback {
                 }
                 System.out.println(turnList);
                 System.out.println("Turn list Updated");
+            }
+            
+            if (json.get("typeUpdate").equals("dropDeckUpdate")) {
+                System.out.println("Updating drop Deck...");
+                Game.deck = new Deck(json.get("deckName").toString());
+                Object o = parser.parse(json.get("cards").toString());
+                JSONArray cardsArray = (JSONArray) o;
+                //System.out.println(cardsArray);
+                for (int i = 0; i < cardsArray.size(); i++) {
+                    JSONObject data = (JSONObject) parser.parse(cardsArray.get(i).toString());
+                    Game.dropedDeck.addCard(new Card(Integer.parseInt(data.get("cardID").toString()),Integer.parseInt(data.get("cardIndex").toString())));
+                }
+                System.out.println(Game.dropedDeck.cards);
+                System.out.println("Updated");
             }
         } catch (ParseException pe) {
             System.out.println("position: " + pe.getPosition());
