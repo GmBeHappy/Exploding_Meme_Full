@@ -203,7 +203,7 @@ public class LobbyViewManger {
                 update_picture_textpeople();
                 checkmouseposition();
                 updatePlayerInSeat();
-                if (Game.isStart) {
+                if (checkIsStart()) {
                     updateIsmyTurn();
                     Deckgamestart();
                     CreateimageCard(deck_player);

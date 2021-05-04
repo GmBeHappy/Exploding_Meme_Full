@@ -13,12 +13,21 @@ import org.json.simple.parser.JSONParser;
 
 public class Game implements MqttCallback {
 
-    public static boolean isStart;
-    public static boolean isEndGame;
-    public static boolean isMyTurn;
-    public static boolean isAttack;
-    public static boolean isFavor;
-    public static boolean isSkip;
+    public boolean isStart;
+    public boolean isEndGame;
+    public boolean isMyTurn;
+    public boolean isAttack;
+    public boolean isFavor;
+    public boolean isSkip;
+    public boolean isNope;
+    public boolean isSeeTheFuture;
+    public boolean isSuffle;
+    public boolean isNormal2;
+    public boolean isNormal3;
+    public boolean isNormal5;
+
+    public String effect;
+    public String effectUser;
 
     public static Deck deck;
     public static Deck dropedDeck;
@@ -36,6 +45,9 @@ public class Game implements MqttCallback {
     private String clientId;
     private final String USERNAME = "OOP_Exploding_Meme";
     private final String PASSWORD = "ZjFjfNv.VZ-bKh2";
+
+    private String target;
+    private int cardIdTarget;
 
     public Game(String playerName, ArrayList<String> playerNames, String gameRoom) throws MqttException, InterruptedException {
         System.out.println("gameeeee");
@@ -75,23 +87,26 @@ public class Game implements MqttCallback {
             this.updateTurnList();
         }
 
-        Game.isStart = true;
-        Game.isEndGame = false;
-        Game.isMyTurn = false;
-        Game.isAttack = false;
-        Game.isFavor = false;
-        Game.isSkip = false;
+        this.isStart = true;
+        this.isAttack = false;
+        this.isFavor = false;
+        this.isNope = false;
+        this.isSeeTheFuture = false;
+        this.isSkip = false;
+        this.isSuffle = false;
+        this.isNormal2 = false;
+        this.isNormal3 = false;
+        this.isNormal5 = false;
     }
 
-    public static boolean endTurn() {
+    public boolean endTurn() {
         try {
-            if (!Game.isAttack) {
+            if (!this.isAttack) {
                 String last = turnList.get(0);
                 turnList.remove(0);
                 turnList.add(last);
-            }
-            else {
-                Game.isAttack = false;
+            } else {
+                this.isAttack = false;
             }
             //public turnList
         } catch (Exception e) {
@@ -112,7 +127,7 @@ public class Game implements MqttCallback {
 
     }
 
-    private static MqttConnectOptions setUpConnectionOptions(String username, String password) {
+    private MqttConnectOptions setUpConnectionOptions(String username, String password) {
         MqttConnectOptions connOpts = new MqttConnectOptions();
         connOpts.setCleanSession(true);
         connOpts.setUserName(username);
@@ -185,7 +200,7 @@ public class Game implements MqttCallback {
         this.sendMessage(objUpdateDeck.toJSONString());
         System.out.println("sent");
     }
-    
+
     public void updateDropedDeck() throws MqttException {
         JSONObject objUpdateDropedDeck = new JSONObject();
         JSONArray cardIdArray = new JSONArray();
@@ -204,9 +219,9 @@ public class Game implements MqttCallback {
         this.sendMessage(objUpdateDropedDeck.toJSONString());
         System.out.println("sent");
     }
-    
+
     public void drawCard() throws MqttException {
-        if (!Game.isSkip){
+        if (!this.isSkip) {
             for (int i = 0; i < players.size(); i++) {
                 if (players.get(i).getPlayerName().equals(this.playerName)) {
                     Card newCard = Game.deck.drawCard();
@@ -214,9 +229,8 @@ public class Game implements MqttCallback {
                     System.out.println(players.get(i).getPlayerName() + " draw " + newCard);
                 }
             }
-        }
-        else {
-            Game.isSkip = false;
+        } else {
+            this.isSkip = false;
         }
         //this.updatePlayerHand();
         //this.updateDeck();
@@ -235,11 +249,11 @@ public class Game implements MqttCallback {
                         System.out.println("removing exploding from " + players.get(i).getPlayerName() + "hand");
                         int exploIndex = Game.players.get(i).hand.removeExploding();
                         System.out.println("removed exploding from " + players.get(i).getPlayerName() + "hand");
-                        Game.deck.addCard(new Card(12,exploIndex));
+                        Game.deck.addCard(new Card(12, exploIndex));
                         System.out.println("return exploding to deck");
                         Game.deck.shuffle();
                         System.out.println("deck suffle");
-                        
+
                         this.endTurn();
                     } else {
                         System.out.println("Lost");
@@ -304,7 +318,7 @@ public class Game implements MqttCallback {
                 }
                 System.out.println("Hands Updated");
             }
-            
+
             if (json.get("typeUpdate").equals("turnListUpdate")) {
                 System.out.println("Updating Turn list...");
                 Object o = parser.parse(json.get("turnList").toString());
@@ -317,7 +331,7 @@ public class Game implements MqttCallback {
                 System.out.println(turnList);
                 System.out.println("Turn list Updated");
             }
-            
+
             if (json.get("typeUpdate").equals("dropDeckUpdate")) {
                 System.out.println("Updating drop Deck...");
                 Game.dropedDeck = new Deck(json.get("deckName").toString());
@@ -326,14 +340,188 @@ public class Game implements MqttCallback {
                 //System.out.println(cardsArray);
                 for (int i = 0; i < cardsArray.size(); i++) {
                     JSONObject data = (JSONObject) parser.parse(cardsArray.get(i).toString());
-                    Game.dropedDeck.addCard(new Card(Integer.parseInt(data.get("cardID").toString()),Integer.parseInt(data.get("cardIndex").toString())));
+                    Game.dropedDeck.addCard(new Card(Integer.parseInt(data.get("cardID").toString()), Integer.parseInt(data.get("cardIndex").toString())));
                 }
                 System.out.println(Game.dropedDeck.cards);
                 System.out.println("Updated");
             }
+
+            if (json.get("typeUpdate").equals("effectUpdate")) {
+                System.out.println("Updating effect...");
+                System.out.print(json.get("usePlayer").toString() + " use ");
+                this.effectUser = json.get("usePlayer").toString();
+                this.effect = json.get("effect").toString();
+                switch (json.get("effect").toString()) {
+                    case "attack":
+                        this.isAttack = true;
+                        System.out.println("Attacked");
+                        break;
+                    case "favor":
+                        this.isFavor = true;
+                        System.out.println("Favored");
+                        break;
+                    case "nope":
+                        this.isNope = true;
+                        System.out.println("Nope");
+                        break;
+                    case "seeTeFuture":
+                        this.isSeeTheFuture = true;
+                        System.out.println("See the future");
+                        break;
+                    case "suffle":
+                        this.isSuffle = true;
+                        System.out.println("suffle");
+                        break;
+                    case "skip":
+                        this.isSkip = true;
+                        System.out.println("skip");
+                        break;
+                    case "normal2":
+                        this.isNormal2 = true;
+                        System.out.println("normal2");
+                        break;
+                    case "norma3":
+                        this.isNormal3 = true;
+                        System.out.println("normal3");
+                        break;
+                    case "normal5":
+                        this.isNormal5 = true;
+                        System.out.println("normal5");
+                        break;
+                }
+                System.out.println("Effect updated");
+            }
+
+            if (json.get("typeUpdate").equals("clearEffect")) {
+                this.isAttack = false;
+                this.isFavor = false;
+                this.isNope = false;
+                this.isSeeTheFuture = false;
+                this.isSkip = false;
+                this.isSuffle = false;
+                this.isNormal2 = false;
+                this.isNormal3 = false;
+                this.isNormal5 = false;
+                this.effect = "";
+                this.effectUser = "";
+            }
         } catch (ParseException pe) {
             System.out.println("position: " + pe.getPosition());
             System.out.println(pe);
+        }
+    }
+
+    public void useCard(Card card) throws MqttException {
+        effect(card.getCardId());
+    }
+
+    public void useCard(ArrayList<Card> cards) {
+        switch (cards.size()) {
+            case 2:
+                System.out.println("sending normal2...");
+                JSONObject normal2Msg = new JSONObject();
+                normal2Msg.put("usePlayer", this.playerName);
+                normal2Msg.put("typeUpdate", "effectUpdate");
+                normal2Msg.put("effect", "normal2");
+                normal2Msg.put("target", this.target);
+                normal2Msg.put("data", this.cardIdTarget);
+                System.out.println(normal2Msg);
+                break;
+            case 3:
+                System.out.println("sending normal3...");
+                JSONObject normal3Msg = new JSONObject();
+                normal3Msg.put("usePlayer", this.playerName);
+                normal3Msg.put("typeUpdate", "effectUpdate");
+                normal3Msg.put("effect", "normal2");
+                normal3Msg.put("target", this.target);
+                normal3Msg.put("data", this.cardIdTarget);
+                System.out.println(normal3Msg);
+                break;
+            case 5:
+                System.out.println("sending normal5...");
+                JSONObject normal5Msg = new JSONObject();
+                normal5Msg.put("usePlayer", this.playerName);
+                normal5Msg.put("typeUpdate", "effectUpdate");
+                normal5Msg.put("effect", "normal2");
+                normal5Msg.put("data", this.cardIdTarget);
+                System.out.println(normal5Msg);
+                break;
+        }
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public void setCardIdTarget(int cardIdTarget) {
+        this.cardIdTarget = cardIdTarget;
+    }
+
+    public void clearEffect() throws MqttException {
+        System.out.println("sending clear effect...");
+        JSONObject clearMsg = new JSONObject();
+        clearMsg.put("typeUpdate", "clearEffect");
+        System.out.println(clearMsg);
+        this.sendMessage(clearMsg.toJSONString());
+    }
+
+    private void effect(int id) throws MqttException {
+        switch (id) {
+            case 0:
+                System.out.println("sending Attack...");
+                JSONObject attackMsg = new JSONObject();
+                attackMsg.put("usePlayer", this.playerName);
+                attackMsg.put("typeUpdate", "effectUpdate");
+                attackMsg.put("effect", "attack");
+                attackMsg.put("target", turnList.get(1));
+                System.out.println(attackMsg);
+                this.sendMessage(attackMsg.toJSONString());
+                break;
+            case 1:
+                System.out.println("sending Favor...");
+                JSONObject favorMsg = new JSONObject();
+                favorMsg.put("usePlayer", this.playerName);
+                favorMsg.put("typeUpdate", "effectUpdate");
+                favorMsg.put("effect", "favor");
+                favorMsg.put("target", this.target);
+                System.out.println(favorMsg);
+                this.sendMessage(favorMsg.toJSONString());
+                break;
+            case 2:
+                System.out.println("sending Nope...");
+                JSONObject nopeMsg = new JSONObject();
+                nopeMsg.put("usePlayer", this.playerName);
+                nopeMsg.put("typeUpdate", "effectUpdate");
+                nopeMsg.put("effect", "nope");
+                System.out.println(nopeMsg);
+                this.sendMessage(nopeMsg.toJSONString());
+                break;
+            case 3:
+                System.out.println("sending See the future...");
+                JSONObject seeMsg = new JSONObject();
+                seeMsg.put("usePlayer", this.playerName);
+                seeMsg.put("typeUpdate", "effectUpdate");
+                seeMsg.put("effect", "seeTheFuture");
+                System.out.println(seeMsg);
+                this.sendMessage(seeMsg.toJSONString());
+                break;
+            case 4:
+                System.out.println("sending Suffle...");
+                JSONObject suffleMsg = new JSONObject();
+                suffleMsg.put("usePlayer", this.playerName);
+                suffleMsg.put("typeUpdate", "effectUpdate");
+                suffleMsg.put("effect", "suffle");
+                System.out.println(suffleMsg);
+                this.sendMessage(suffleMsg.toJSONString());
+                break;
+            case 5:
+                System.out.println("sending skip...");
+                JSONObject skipMsg = new JSONObject();
+                skipMsg.put("usePlayer", this.playerName);
+                skipMsg.put("typeUpdate", "effectUpdate");
+                skipMsg.put("effect", "skip");
+                System.out.println(skipMsg);
+                break;
         }
     }
 }
