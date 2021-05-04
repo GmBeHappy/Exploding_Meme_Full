@@ -70,6 +70,7 @@ public class Lobby implements MqttCallback {
     }
 
     public void startGame() throws MqttException, InterruptedException {
+        this.isStart=true;
         System.out.println("Game Start");
         this.game = new Game(playerName, playerNames, this.gameRoom);
         this.client.disconnect();
@@ -167,7 +168,8 @@ public class Lobby implements MqttCallback {
 
                         System.out.println(this.playerNames);
                     }
-                } else if (json.get("typeUpdate").equals("isStart")) {
+                } 
+                if (json.get("typeUpdate").equals("isStart")) {
                     if (json.get("status").equals("true")) {
                         this.isStart = true;
                     } else {
