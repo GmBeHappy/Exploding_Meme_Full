@@ -25,6 +25,7 @@ public class Game implements MqttCallback {
     public boolean isNormal2;
     public boolean isNormal3;
     public boolean isNormal5;
+    public boolean isAlive;
 
     public String effect;
     public String effectUser;
@@ -97,6 +98,8 @@ public class Game implements MqttCallback {
         this.isNormal2 = false;
         this.isNormal3 = false;
         this.isNormal5 = false;
+        this.isEndGame = false;
+        this.isAlive = false;
     }
 
     public boolean endTurn() {
@@ -328,8 +331,18 @@ public class Game implements MqttCallback {
                 for (int i = 0; i < turnListArray.size(); i++) {
                     turnList.add(turnListArray.get(i).toString());
                 }
+                isAlive = false;
+                for (int i = 0; i < turnList.size(); i++) {
+                    if (turnList.get(i).equals(playerName)) {
+                        isAlive = true;
+                    }
+                }
                 System.out.println(turnList);
                 System.out.println("Turn list Updated");
+                if (turnList.size() <= 1) {
+                    isEndGame = true;
+                    //public isEndGame
+                }
             }
 
             if (json.get("typeUpdate").equals("dropDeckUpdate")) {
