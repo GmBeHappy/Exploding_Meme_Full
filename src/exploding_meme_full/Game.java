@@ -17,6 +17,8 @@ public class Game implements MqttCallback {
     public static boolean isEndGame;
     public static boolean isMyTurn;
     public static boolean isAttack;
+    public static boolean isFavor;
+    public static boolean isSkip;
 
     public static Deck deck;
     public static Deck dropedDeck;
@@ -77,13 +79,26 @@ public class Game implements MqttCallback {
         Game.isEndGame = false;
         Game.isMyTurn = false;
         Game.isAttack = false;
+        Game.isFavor = false;
+        Game.isSkip = false;
     }
 
     public static boolean endTurn() {
         try {
-            String last = turnList.get(0);
-            turnList.remove(0);
-            turnList.add(last);
+            if (!Game.isSkip){
+                if (!Game.isAttack) {
+                    String last = turnList.get(0);
+                    turnList.remove(0);
+                    turnList.add(last);
+                }
+                else {
+                    Game.isAttack = false;
+                }
+            }
+            else {
+                Game.isAttack = false;
+                Game.isSkip = false;
+            }
             //public turnList
         } catch (Exception e) {
             return false;
