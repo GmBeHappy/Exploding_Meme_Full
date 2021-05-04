@@ -237,16 +237,15 @@ public class LobbyViewManger {
             } else {
                 text_numbercared[i].setText(String.valueOf(number_cardplayer[i]));
                 
-                gamePane.getChildren().remove(textplayer_name[i]);
                 textplayer_name[i] = new InfoLabel(player_name[i]);
                 textplayer_name[i].setText(player_name[i]);
                 gamePane.getChildren().add(textplayer_name[i]);
 
-                gamePane.getChildren().remove(textplayer_name[i]);
+//                gamePane.getChildren().remove(textplayer_name[i]);
                 picture_player[i] = new ImageView("exploding_meme_full/resource/player.png");
                 gamePane.getChildren().add(picture_player[i]);
                 
-                gamePane.getChildren().remove(picture_backplayer[i]);
+//                gamePane.getChildren().remove(picture_backplayer[i]);
                 Image image = new Image("exploding_meme_full/resource/Back.png", 100, 100, true, true);
                 picture_backplayer[i] = new ImageView(image);
                 gamePane.getChildren().add(picture_backplayer[i]);
