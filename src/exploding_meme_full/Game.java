@@ -85,19 +85,13 @@ public class Game implements MqttCallback {
 
     public static boolean endTurn() {
         try {
-            if (!Game.isSkip){
-                if (!Game.isAttack) {
-                    String last = turnList.get(0);
-                    turnList.remove(0);
-                    turnList.add(last);
-                }
-                else {
-                    Game.isAttack = false;
-                }
+            if (!Game.isAttack) {
+                String last = turnList.get(0);
+                turnList.remove(0);
+                turnList.add(last);
             }
             else {
                 Game.isAttack = false;
-                Game.isSkip = false;
             }
             //public turnList
         } catch (Exception e) {
@@ -212,12 +206,17 @@ public class Game implements MqttCallback {
     }
     
     public void drawCard() throws MqttException {
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getPlayerName().equals(this.playerName)) {
-                Card newCard = Game.deck.drawCard();
-                Game.players.get(i).hand.addCard(newCard);
-                System.out.println(players.get(i).getPlayerName() + " draw " + newCard);
+        if (!Game.isSkip){
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i).getPlayerName().equals(this.playerName)) {
+                    Card newCard = Game.deck.drawCard();
+                    Game.players.get(i).hand.addCard(newCard);
+                    System.out.println(players.get(i).getPlayerName() + " draw " + newCard);
+                }
             }
+        }
+        else {
+            Game.isSkip = false;
         }
         //this.updatePlayerHand();
         //this.updateDeck();
