@@ -13,19 +13,19 @@ import org.json.simple.parser.JSONParser;
 
 public class Game implements MqttCallback {
 
-    public boolean isStart;
-    public boolean isEndGame;
-    public boolean isMyTurn;
-    public boolean isAttack;
-    public boolean isFavor;
-    public boolean isSkip;
-    public boolean isNope;
-    public boolean isSeeTheFuture;
-    public boolean isSuffle;
-    public boolean isNormal2;
-    public boolean isNormal3;
-    public boolean isNormal5;
-    public boolean isAlive;
+    public static boolean isStart;
+    public static boolean isEndGame;
+    public static boolean isMyTurn;
+    public static boolean isAttack;
+    public static boolean isFavor;
+    public static boolean isSkip;
+    public static boolean isNope;
+    public static boolean isSeeTheFuture;
+    public static boolean isSuffle;
+    public static boolean isNormal2;
+    public static boolean isNormal3;
+    public static boolean isNormal5;
+    public static boolean isAlive;
 
     public String effect;
     public String effectUser;
@@ -88,18 +88,18 @@ public class Game implements MqttCallback {
             this.updateTurnList();
         }
 
-        this.isStart = true;
-        this.isAttack = false;
-        this.isFavor = false;
-        this.isNope = false;
-        this.isSeeTheFuture = false;
-        this.isSkip = false;
-        this.isSuffle = false;
-        this.isNormal2 = false;
-        this.isNormal3 = false;
-        this.isNormal5 = false;
-        this.isEndGame = false;
-        this.isAlive = false;
+        Game.isStart = true;
+        Game.isAttack = false;
+        Game.isFavor = false;
+        Game.isNope = false;
+        Game.isSeeTheFuture = false;
+        Game.isSkip = false;
+        Game.isSuffle = false;
+        Game.isNormal2 = false;
+        Game.isNormal3 = false;
+        Game.isNormal5 = false;
+        Game.isEndGame = false;
+        Game.isAlive = false;
     }
 
     public boolean endTurn() {
@@ -366,39 +366,39 @@ public class Game implements MqttCallback {
                 this.effect = json.get("effect").toString();
                 switch (json.get("effect").toString()) {
                     case "attack":
-                        this.isAttack = true;
+                        Game.isAttack = true;
                         System.out.println("Attacked");
                         break;
                     case "favor":
-                        this.isFavor = true;
+                        Game.isFavor = true;
                         System.out.println("Favored");
                         break;
                     case "nope":
-                        this.isNope = true;
+                        Game.isNope = true;
                         System.out.println("Nope");
                         break;
                     case "seeTeFuture":
-                        this.isSeeTheFuture = true;
+                        Game.isSeeTheFuture = true;
                         System.out.println("See the future");
                         break;
                     case "suffle":
-                        this.isSuffle = true;
+                        Game.isSuffle = true;
                         System.out.println("suffle");
                         break;
                     case "skip":
-                        this.isSkip = true;
+                        Game.isSkip = true;
                         System.out.println("skip");
                         break;
                     case "normal2":
-                        this.isNormal2 = true;
+                        Game.isNormal2 = true;
                         System.out.println("normal2");
                         break;
                     case "norma3":
-                        this.isNormal3 = true;
+                        Game.isNormal3 = true;
                         System.out.println("normal3");
                         break;
                     case "normal5":
-                        this.isNormal5 = true;
+                        Game.isNormal5 = true;
                         System.out.println("normal5");
                         break;
                 }
@@ -406,15 +406,15 @@ public class Game implements MqttCallback {
             }
 
             if (json.get("typeUpdate").equals("clearEffect")) {
-                this.isAttack = false;
-                this.isFavor = false;
-                this.isNope = false;
-                this.isSeeTheFuture = false;
-                this.isSkip = false;
-                this.isSuffle = false;
-                this.isNormal2 = false;
-                this.isNormal3 = false;
-                this.isNormal5 = false;
+                Game.isAttack = false;
+                Game.isFavor = false;
+                Game.isNope = false;
+                Game.isSeeTheFuture = false;
+                Game.isSkip = false;
+                Game.isSuffle = false;
+                Game.isNormal2 = false;
+                Game.isNormal3 = false;
+                Game.isNormal5 = false;
                 this.effect = "";
                 this.effectUser = "";
             }
