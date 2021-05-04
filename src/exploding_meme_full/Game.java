@@ -305,7 +305,7 @@ public class Game implements MqttCallback {
             
             if (json.get("typeUpdate").equals("dropDeckUpdate")) {
                 System.out.println("Updating drop Deck...");
-                Game.deck = new Deck(json.get("deckName").toString());
+                Game.dropedDeck = new Deck(json.get("deckName").toString());
                 Object o = parser.parse(json.get("cards").toString());
                 JSONArray cardsArray = (JSONArray) o;
                 //System.out.println(cardsArray);
