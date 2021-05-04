@@ -15,7 +15,7 @@ public class Deck {
     public final boolean refill(int playerValue) {
         try {
             for (int i = 0; i < 11; i++) {
-                for (int j = 0; j < 1; j++) {
+                for (int j = 0; j < 2; j++) {
                     cards.add(new Card(i));
                 }
             }

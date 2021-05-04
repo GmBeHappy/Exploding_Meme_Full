@@ -205,7 +205,7 @@ public class Game implements MqttCallback {
             }
         }
         //this.updatePlayerHand();
-        this.updateDeck();
+        //this.updateDeck();
     }
 
     public void turnHaveEnd() throws MqttException {
@@ -240,6 +240,7 @@ public class Game implements MqttCallback {
                 System.out.println(players.get(i).getPlayerName() + " end turn! ");
             }
         }
+        this.updateDeck();
         this.updateDropedDeck();
         this.updatePlayerHand();
         this.updateTurnList();
