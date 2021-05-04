@@ -413,8 +413,8 @@ public class LobbyViewManger {
 
     private void CreateimageCard(Deck deck) {
         int j = 0;
+        gamePane.getChildren().remove(picture_card);
         for (int i = 0; i < deck.cards.size(); i++) {
-            gamePane.getChildren().remove(picture_card[i]);
             picture_card[i] = new ImageView(deck.cards.get(i).getImage());
             picture_card[i].setLayoutX(450 + i * 150);
 
