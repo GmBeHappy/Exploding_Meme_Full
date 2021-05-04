@@ -332,16 +332,16 @@ public class LobbyViewManger {
     }
 
     private void startGame() throws MqttException, InterruptedException {
-        if(Game.players.size()>=2){
+//        if(Game.players.size()>=2){
             JSONObject msg = new JSONObject();
             msg.put("typeUpdate", "isStart");
             msg.put("status", "true");
             lobby.sendMessage(msg.toJSONString());
             lobby.startGame();
-        }
-        else{
-            System.out.println("Waiting other player");
-        }
+//        }
+//        else{
+//            System.out.println("Waiting other player");
+//        }
     }
 
     private boolean checkIsStart() {
