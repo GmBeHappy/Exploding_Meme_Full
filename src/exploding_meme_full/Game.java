@@ -98,8 +98,8 @@ public class Game implements MqttCallback {
         Game.isNormal2 = false;
         Game.isNormal3 = false;
         Game.isNormal5 = false;
-        Game.isEndGame = false;
-        Game.isAlive = false;
+        Game.isEndGame = true;
+        Game.isAlive = true;
     }
 
     public boolean endTurn() {

@@ -40,6 +40,7 @@ public class LobbyViewManger {
     private InfoLabel chooseShipLabel1;
 
     private InfoLabel gameRoomLabel;
+    private InfoLabel textdie;
 
     private Textuse[] text_numbercared = new Textuse[6];
 
@@ -126,7 +127,13 @@ public class LobbyViewManger {
             gamePane.getChildren().add(CreateButtonWait);
             gamestartnow();
         }
-
+   
+        textdie = new InfoLabel("",64);
+        textdie.setLayoutX(50);
+        textdie.setLayoutY(950);
+        gamePane.getChildren().add(textdie);
+     
+       
         gameRoomLabel = new InfoLabel(String.format("Room : %s", gameRoom), 36);
         gameRoomLabel.setLayoutX(40);
         gameRoomLabel.setLayoutY(25);
@@ -208,6 +215,7 @@ public class LobbyViewManger {
                     Deckgamestart();
                     CreateimageCard(deck_player);
                     updatePlayerHand();
+                    checkgameend_die();
                 }
             }
 
@@ -440,6 +448,23 @@ public class LobbyViewManger {
         createButton();
     }
 
+    private void checkgameend_die()
+    {
+        if(!Game.isAlive)
+        {
+       
+             
+        textdie.setText("YOUR DEATH");
+     
+        }
+        if(!Game.isEndGame)
+        {
+         textdie.setText("END GAME");
+       
+      
+        }
+    }
+                
     private void createButton() {
         Card_1 = new SpaceRunnerButton("1 CARD", 49, 190);
         Card_2 = new SpaceRunnerButton("2 CARD", 49, 190);
@@ -449,16 +474,18 @@ public class LobbyViewManger {
 
         Card_1.setLayoutX(0);
         Card_1.setLayoutY(-200);
-        Card_1.setOnAction((event)
+            Card_1.setOnAction((ActionEvent event)
                 -> {
-
+              
         });
+            
+            
+      
 
         Card_2.setLayoutX(0);
         Card_2.setLayoutY(-200);
         Card_2.setOnAction((event)
                 -> {
-
         });
 
         Card_3.setLayoutX(0);
