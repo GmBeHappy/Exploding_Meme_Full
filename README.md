@@ -1,7 +1,12 @@
 "# Exploding_Meme_Full" 
 
-Exploding Meme Game Full Code.
-OOP project.
+Project วิชา OOP (OBJECT ORIENTED PROGRAMMING)
+ปี 1 วิศวกรรมคอมพิวเตอร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง
+
+หัวข้อพัฒนา card game โดยใช้ JavaFX
+ต้นแบบเกมจาก board game Exploding Kitten
+โดยพัฒนาในรูปแบบ Online Multiplayer
+ใช้ mqtt ในการเชื่อมต่อข้อมูล
 
 ## Requirement
 ### Library
